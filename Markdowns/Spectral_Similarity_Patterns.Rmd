@@ -1,0 +1,75 @@
+---
+title: "Spectral_Similarity_Patterns"
+author: "Degnan, David J"
+date: "2023-05-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(dplyr)
+```
+
+## Read all files 
+
+```{r Create Max and Sum datasets}
+# Load CoreMS Directory 
+#CoreMS_Dir <- "/Users/degn400/Library/Group Containers/UBF8T346G9.OneDriveStandaloneSuite/OneDrive - PNNL.noindex/OneDrive - #PNNL/Desktop/MQ/MQ_Data/Final_Dataset"
+#
+## List files 
+#MaxFiles <- list.files(file.path(CoreMS_Dir, "MAX"), full.names = T)
+#SumFiles <- list.files(file.path(CoreMS_Dir, "SUM"), full.names = T)
+#
+## Function to extract data 
+#pullData <- function(files) {
+#  
+#  return(do.call(bind_rows, lapply(files, function(x) {
+#    
+#    message(x)
+#    
+#    data <- fread(x) %>% 
+#      dplyr::select(-c(`Retention Time`, `Retention Time Ref`, `Retention index`, `Retention index Ref`, `Retention Index Score`, Reason)) 
+#    
+#    numOmitted <- rowSums(is.na(data)) %>% .[. > 0] %>% length()
+#    totalNum <- nrow(data)
+#    
+#    message(paste0("...Number omitted: ", numOmitted, " out of the total: ", totalNum, " which is ", round(numOmitted / totalNum, 4) * 100, "%"))
+#    
+#    data <- data %>% na.omit()
+#    
+#    # Random type fixes since data science the output is in scientific notation that 
+#    # is sometimes read as a string. 
+#    data$`Vicis Wave Hadges Distance` <- as.numeric(data$`Vicis Wave Hadges Distance`)
+#    data$VW1 <- as.numeric(data$VW1)
+#    data$`Symmetric Chi Squared Distance` <- as.numeric(data$`Symmetric Chi Squared Distance`)
+#    data$`Kumar Johnson Distance` <- as.numeric(data$`Kumar Johnson Distance`)
+#    data$`Kumar Johnson Divergence` <- as.numeric(data$`Kumar Johnson Divergence`)
+#    
+#    return(data)
+#    
+#  })))
+#
+#}
+#
+#MaxData <- pullData(MaxFiles)
+#SumData <- pullData(SumFiles)
+#
+#fwrite(MaxData, "~/Downloads/MaxData.tsv", quote = F, row.names = F, sep = "\t")
+#fwrite(SumData, "~/Downloads/SumData.tsv", quote = F, row.names = F, sep = "\t")
+
+MaxData <- fread("~/Downloads/MaxData.tsv")
+SumData <- fread("~/Downloads/SumData.tsv")
+```
+
+## Correlation Score
+
+```{r}
+
+
+
+```
+
+
+
+
