@@ -65,8 +65,7 @@ SumData <- fread("~/Downloads/SumData.tsv")
 ## Correlation Score
 
 ```{r}
-
-
+ScoreMetadata <- fread("../Metadata/Score_Metadata.txt") %>%
 
 ```
 
