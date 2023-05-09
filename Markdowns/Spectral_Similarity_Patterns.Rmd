@@ -6,9 +6,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE)
 library(data.table)
 library(dplyr)
+library(pheatmap)
+library(ggplot2)
+library(patchwork)
 ```
 
 ## Read all files 
@@ -57,18 +60,31 @@ library(dplyr)
 #
 #fwrite(MaxData, "~/Downloads/MaxData.tsv", quote = F, row.names = F, sep = "\t")
 #fwrite(SumData, "~/Downloads/SumData.tsv", quote = F, row.names = F, sep = "\t")
-
-MaxData <- fread("~/Downloads/MaxData.tsv")
-SumData <- fread("~/Downloads/SumData.tsv")
+ScoreMetadata <- fread("../Metadata/Score_Metadata.txt")
 ```
 
 ## Correlation Score
 
-```{r}
-ScoreMetadata <- fread("../Metadata/Score_Metadata.txt") %>%
+#### Pearson Correlation: Max Score
 
+```{r, MaxPearson, fig.height = 12, fig.width = 12}
+MaxPearson <- fread("../Data/Max_Pearson.txt")
+MP_Mat <- matrix(MaxPearson$Pearson, nrow = 74, ncol = 74)
+colnames(MP_Mat) <- row.names(MP_Mat) <- MaxPearson$Score1 %>% unique()
+
+HMA <- pheatmap(MP_Mat, main = "Max: Pearson Correlation")
+HMA
 ```
 
+#### Pearson Correlation: Sum Score
 
+```{r, SumPearson, fig.height = 12, fig.width = 12}
+SumPearson <- fread("../Data/Sum_Pearson.txt")
+SP_Mat <- matrix(SumPearson$Pearson, nrow = 74, ncol = 74)
+colnames(SP_Mat) <- row.names(SP_Mat) <- MaxPearson$Score1 %>% unique()
+
+HMB <- pheatmap(SP_Mat, main = "Sum: Pearson Correlation")
+HMB
+```
 
 

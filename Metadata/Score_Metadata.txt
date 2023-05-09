@@ -1,1 +1,75 @@
-Score	FamilySpectral Similarity Score	Combined RIWeighted Cosine Correlation	Inner ProductCosine Correlation	Inner ProductStein Scott Similarity	Inner ProductStein Scott Similarity Nist	Inner ProductPearson Correlation	CorrelativeSpearman Correlation	CorrelativeKendall Tau Correlation	CorrelativeEuclidean Distance	LP DistanceManhattan Distance	LP DistanceJaccard Distance	Inner ProductDWT Correlation	Inner ProductDFT Correlation	Inner ProductChebyshev Distance	LP DistanceSquared Euclidean Distance	Chi Squared Fidelity Similarity	Fidelity Matusita Distance	Fidelity Squared-chord Distance	Fidelity Harmonic mean Distance	Inner ProductPearson Chi Squared Distance	Chi Squared Neyman Chi Squared Distance	Chi Squared Probabilistic symmetric X2 Distance	Chi Squared Topsoe Distance	Shannon's EntropyChernoff Distance	FidelityRuzicka Distance	L1 DistanceRoberts Distance	L1 DistanceMotyka Distance	IntersectionCanberra Distance	L1 DistanceCanberra Metric	L1 MetricKulczynski 1 Distance	L1 DistanceLorentzian Distance	L1 DistanceClark Distance	Chi Squared Hellinger Distance	Fidelity Whittaker index of association Distance	Shannon's EntropySpectral Contrast Angle	Inner ProductWave Hedges Distance	IntersectionDice Similarity	Inner ProductInner Product Distance	Inner ProductDivergence Distance	Chi Squared Jensen Differences Distance	Shannon's EntropyKumar Johnson Distance	Combination"Avg (L1, L8) Distance"	CombinationVicis Wave Hadges Distance	Vicis Wave HedgesVicis-Symmetric X2 1 Distance	Chi Squared Vicis-Symmetric X2 2 Distance	Chi Squared Vicis-Symmetric X2 3 Distance	Chi Squared Max Symmetric Chi Squared Distance	Chi Squared Min Symmetric Chi Squared Distance	Chi Squared Additive Symmetric Chi Squared	Chi Squared Battacharya Distance	FidelityGeneralized Ochai Index	Inner ProductGower Distance	L1 DistanceImproved Square Root Cosine Similarity	Inner ProductIntersection Similarity	IntersectionJ Divergence	Shannon's EntropyJensen Shannon Index	Shannon's EntropyK Divergence	Shannon's EntropyVW6	Vicis Wave HedgesVW5	Vicis Wave HedgesVW4	Vicis Wave HedgesVW3	Vicis Wave HedgesVW2	Vicis Wave HedgesVW1	Vicis Wave HedgesTaneja Divergence	CombinationSymmetric Chi Squared Distance	Chi Squared Squared Chi Squared Distance	Chi Squared Square Root Cosine Correlation	Inner ProductSorensen Distance	LP DistanceMinokowski 3 Distance	LP DistanceMinokowski 4 Distance	LP DistanceKumar Johnson Divergence	Shannon's EntropyKumar Hassebrook Similarity	Inner ProductKullback Leibler Divergence	Shannon's EntropySoergel Distance	L1 Distance
+Score	Family	Type	Bound
+Spectral Similarity Score	Combined RI		
+Weighted Cosine Correlation	Inner Product		
+Cosine Correlation	Inner Product		
+Stein Scott Similarity	Inner Product		
+Stein Scott Similarity Nist	Inner Product		
+Pearson Correlation	Correlative		
+Spearman Correlation	Correlative		
+Kendall Tau Correlation	Correlative		
+Euclidean Distance	LP Distance		
+Manhattan Distance	LP Distance		
+Jaccard Distance	Inner Product		
+DWT Correlation	Inner Product		
+DFT Correlation	Inner Product		
+Chebyshev Distance	LP Distance		
+Squared Euclidean Distance	Chi Squared 		
+Fidelity Similarity	Fidelity 		
+Matusita Distance	Fidelity 		
+Squared-chord Distance	Fidelity 		
+Harmonic mean Distance	Inner Product		
+Pearson Chi Squared Distance	Chi Squared 		
+Neyman Chi Squared Distance	Chi Squared 		
+Probabilistic symmetric X2 Distance	Chi Squared 		
+Topsoe Distance	Shannon's Entropy		
+Chernoff Distance	Fidelity		
+Ruzicka Distance	L1 Distance		
+Roberts Distance	L1 Distance		
+Motyka Distance	Intersection		
+Canberra Distance	L1 Distance		
+Canberra Metric	L1 Metric		
+Kulczynski 1 Distance	L1 Distance		
+Lorentzian Distance	L1 Distance		
+Clark Distance	Chi Squared 		
+Hellinger Distance	Fidelity 		
+Whittaker index of association Distance	Shannon's Entropy		
+Spectral Contrast Angle	Inner Product		
+Wave Hedges Distance	Intersection		
+Dice Similarity	Inner Product		
+Inner Product Distance	Inner Product		
+Divergence Distance	Chi Squared 		
+Jensen Differences Distance	Shannon's Entropy		
+Kumar Johnson Distance	Combination		
+"Avg (L1, L8) Distance"	Combination		
+Vicis Wave Hadges Distance	Vicis Wave Hedges		
+Vicis-Symmetric X2 1 Distance	Chi Squared 		
+Vicis-Symmetric X2 2 Distance	Chi Squared 		
+Vicis-Symmetric X2 3 Distance	Chi Squared 		
+Max Symmetric Chi Squared Distance	Chi Squared 		
+Min Symmetric Chi Squared Distance	Chi Squared 		
+Additive Symmetric Chi Squared	Chi Squared 		
+Battacharya Distance	Fidelity		
+Generalized Ochai Index	Inner Product		
+Gower Distance	L1 Distance		
+Improved Square Root Cosine Similarity	Inner Product		
+Intersection Similarity	Intersection		
+J Divergence	Shannon's Entropy		
+Jensen Shannon Index	Shannon's Entropy		
+K Divergence	Shannon's Entropy		
+VW6	Vicis Wave Hedges		
+VW5	Vicis Wave Hedges		
+VW4	Vicis Wave Hedges		
+VW3	Vicis Wave Hedges		
+VW2	Vicis Wave Hedges		
+VW1	Vicis Wave Hedges		
+Taneja Divergence	Combination		
+Symmetric Chi Squared Distance	Chi Squared 		
+Squared Chi Squared Distance	Chi Squared 		
+Square Root Cosine Correlation	Inner Product		
+Sorensen Distance	LP Distance		
+Minokowski 3 Distance	LP Distance		
+Minokowski 4 Distance	LP Distance		
+Kumar Johnson Divergence	Shannon's Entropy		
+Kumar Hassebrook Similarity	Inner Product		
+Kullback Leibler Divergence	Shannon's Entropy		
+Soergel Distance	L1 Distance		

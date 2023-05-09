@@ -34,7 +34,28 @@ data.frame(
 ) %>% fwrite("~/Git_Repos/metabolomics_spectral_similarity_score/Data/Max_Pearson.txt", quote = F, row.names = F, sep = "\t")
 
 ##############################
-## MAX: SPEARMAN CORRELATION ##
+## SUM: PEARSON CORRELATION ##
 ##############################
+
+SumPearson <- do.call(rbind, lapply(ScoreMetadata$Score, function(Score1) {
+  
+  message(Score1)
+  
+  do.call(rbind, lapply(ScoreMetadata$Score, function(Score2) {
+    
+    if (!is.numeric(Sum[[Score1]])) {Sum[[Score1]] <- as.numeric(Sum[[Score1]])}
+    if (!is.numeric(Sum[[Score2]])) {Sum[[Score2]] <- as.numeric(Sum[[Score2]])}
+    
+    cor(Sum[[Score1]], Sum[[Score2]], method = "pearson")
+    
+  }))
+}))
+
+data.frame(
+  Score1 = rep(ScoreMetadata$Score, each = 74),
+  Score2 = rep(ScoreMetadata$Score, 74),
+  Pearson = SumPearson
+) %>% fwrite("~/Git_Repos/metabolomics_spectral_similarity_score/Data/Sum_Pearson.txt", quote = F, row.names = F, sep = "\t")
+
 
 
