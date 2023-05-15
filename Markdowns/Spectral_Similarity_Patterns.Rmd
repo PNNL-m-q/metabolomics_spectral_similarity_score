@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE)
 library(data.table)
 library(dplyr)
+library(tidyr)
 library(pheatmap)
 library(ggplot2)
 library(patchwork)
@@ -89,11 +90,41 @@ HMB
 
 ## Random Forest 
 
+#### Add distribution properties 
+
+```{r}
+Sum <- fread("~/Downloads/SumData.tsv")
+
+SummaryStats <- do.call(bind_rows, lapply(ScoreMetadata$Score, function(x) {
+  c(
+    Score = x,
+    Min = Sum[[x]] %>% as.numeric() %>% min() %>% round(4),
+    Median = Sum[[x]] %>% as.numeric() %>% median() %>% round(4),
+    Max = Sum[[x]] %>% as.numeric() %>% max() %>% round(4)
+  )
+}))
+ScoreMetadata <- ScoreMetadata %>% merge(SummaryStats, by = "Score")
+```
+
+#### Build model 
+
 Since both approaches produce the same clusters, we will run one random forest 
 to explain cluster patterns. 
 
 ```{r}
+library(randomForest)
 
+ScoreMetadata$SumCluster <- as.factor(ScoreMetadata$SumCluster)
+ScoreMetadata$Family <- as.factor(ScoreMetadata$Family)
+ScoreMetadata$TheoreticalBounds <- as.factor(ScoreMetadata$TheoreticalBounds)
+ScoreMetadata$Type <- as.factor(ScoreMetadata$Type)
 
+rf <- randomForest(SumCluster ~ Family + Type + TheoreticalBounds + Min + Median + Max, data = ScoreMetadata, mtry = 1000) 
 
+rf
+importance(rf) %>% data.frame() %>% arrange(-MeanDecreaseGini)
 ```
+
+
+
+ 
