@@ -87,4 +87,13 @@ HMB <- pheatmap(SP_Mat, main = "Sum: Pearson Correlation")
 HMB
 ```
 
+## Random Forest 
 
+Since both approaches produce the same clusters, we will run one random forest 
+to explain cluster patterns. 
+
+```{r}
+
+
+
+```
