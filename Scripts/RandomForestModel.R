@@ -122,7 +122,7 @@ SumMetadata <- ScoreMetadata %>%
   dplyr::rename(Min = Sum_ScoreMin, Median = Sum_ScoreMedian, Max = Sum_ScoreMax, Cluster = SumCluster)
 
 Sum_RF_Results <- run_randomforest(SumMetadata)
-saveRDS(Sum_RF_Results, "~/Git_Repos/")
+saveRDS(Sum_RF_Results, "~/Git_Repos/metabolomics_spectral_similarity_score/Data/Sum_RF_Results.RDS")
 
 # Extract only Max Relevant Metadata
 MaxMetadata <- ScoreMetadata %>% 
@@ -141,5 +141,5 @@ MaxMetadata <- ScoreMetadata %>%
   )
 
 Max_RF_Results <- run_randomforest(MaxMetadata)
-
+saveRDS(Max_RF_Results, "~/Git_Repos/metabolomics_spectral_similarity_score/Data/Max_RF_Results.RDS")
 

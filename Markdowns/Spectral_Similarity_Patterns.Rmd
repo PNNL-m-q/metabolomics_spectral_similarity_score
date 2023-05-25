@@ -195,107 +195,65 @@ for a score in the max data
 
 ## Random Forest 
 
+Data was split into 75% training and 25% testing datasets. Hyperparameters were 
+fine tuned using the recipes and workflowsets R packages with leave one out 10-fold 
+cross-validation repeated 5 times each for a total of 50 times. Random forest
+models were fit using the ranger R package. 
+
 #### Sum Model
 
-Testing and training datasets.
+The best fit model was: 
 
 ```{r}
-set.seed(339)
-
-# Extract only Sum-Relevant Metadata
-SumMetadata <- ScoreMetadata %>% 
-  dplyr::select(SumCluster, Family, Type, TheoreticalBounds, Sum_ScoreMin, Sum_ScoreMedian, Sum_ScoreMax, TStatisticSum) %>%
-  dplyr::mutate(
-    SumCluster = factor(SumCluster, levels = 1:4),
-    Family = as.factor(Family),
-    Type = as.factor(Type), 
-    TheoreticalBounds = as.factor(TheoreticalBounds)
-  )
-
-# Split data into testing and training 
-sum_split <- rsample::initial_split(data = SumMetadata, prop = 3/4, strata = SumCluster, breaks = 4)
-sum_train <- rsample::training(sum_split)
-sum_test <- rsample::testing(sum_split)
-
-# Create a recipe 
-sum_recipe <- recipes::recipe(SumCluster ~ ., data = sum_train) 
-
-# Designate a resampling scheme 
-sum_folds <- rsample::vfold_cv(sum_train,
-                               v = 10,
-                               repeats = 5,
-                               strata = SumCluster,
-                               breaks = 4)
-
-# Designate modeling engine
-rf_engine <- parsnip::rand_forest(trees = tune::tune(), mtry = tune::tune()) %>%
-  parsnip::set_engine("ranger", importance = "impurity") %>%
-  parsnip::set_mode("classification")
-
-# Designate test metrics 
-test_metrics <- yardstick::metric_set(yardstick::accuracy)
-
-# Specify number of trees based on a number of levels and m-try
-rf_grid <- dials::grid_regular(dials::trees(), dials::mtry(range = c(1, ncol(SumMetadata)-1)), levels = 5) 
-
-# Run the workflow - currently 1 random forest model
-sum_wf <- workflowsets::workflow_set(
-  preproc = list("nzv" = sum_recipe),
-  models = list(rf = rf_engine)
-)
-wfid_names <- sum_wf$wflow_id
-train_wfs <- sum_wf %>% 
-  workflowsets::option_add(id = wfid_names[which(grepl("rf", wfid_names))], grid = rf_grid)
-
-# Designate half of the cores to run 
-ncores <- floor(parallel::detectCores(logical = TRUE)/2)
-
-# Set the number of cores
-cl <- parallel::makePSOCKcluster(ncores)
-
-# Register cores to use
-doParallel::registerDoParallel(cl)
-
-# Run and resolve workflows 
-sum_wf_complete <- sum_wf %>%
-  workflowsets::workflow_map(resamples = sum_folds,
-                             verbose = TRUE, 
-                             seed = 339,
-                             metrics = test_metrics)
-
-# Stop parallel computing cores 
-parallel::stopCluster(cl)
+SumModel <- readRDS("../Data/Sum_RF_Results.RDS")
+SumModel[[1]]
 ```
+
+The testing dataset yielded the following results: 
 
 ```{r}
-# extract best fit parameters
-best_rf_sum <- sum_wf_complete %>%
-  workflowsets::extract_workflow_set_result(id = "nzv_rf") %>%
-  tune::select_best(metric = "accuracy")
-
-# fit to training
-fitted_randf_sum_all <- sum_wf_complete %>%
-  workflowsets::extract_workflow(id = "nzv_rf") %>%
-  tune::finalize_workflow(best_rf_sum) %>%
-  parsnip::fit(data = sum_train)
-
-
-sum_cnmc_all <- predict(fitted_randf_sum_all, sum_test) %>%
-  dplyr::bind_cols(predict(fitted_randf_sum_all, sum_test, type = "prob")) %>%
-  dplyr::bind_cols(sum_test %>% dplyr::select(SumCluster)) %>%
-  dplyr::rename(pred_class = .pred_class)
-
-sum_cnmc_all_accuracy <- sum_cnmc_all %>%
-  test_metrics(truth = SumCluster, estimate = pred_class)
-
-fitted_randf_sum_all %>%
-  workflows::extract_fit_parsnip() %>%
-  vip::vi(scale = TRUE) %>%
-  dplyr::arrange(dplyr::desc(Importance)) 
+SumModel[[2]]
 ```
 
+Description:
+
+```{r}
+SumModel[[3]]
+```
+
+Description:
+
+```{r}
+SumModel[[4]]
+```
+
+#### Max Model
+
+The best fit model was: 
+
+```{r}
+MaxModel <- readRDS("../Data/Max_RF_Results.RDS")
+MaxModel[[1]]
+```
+
+The testing dataset yielded the following results: 
+
+```{r}
+MaxModel[[2]]
+```
+
+Description:
+
+```{r}
+MaxModel[[3]]
+```
+
+Description:
+
+```{r}
+MaxModel[[4]]
+```
+
+## Cluster Description
 
 
-
-
- 
