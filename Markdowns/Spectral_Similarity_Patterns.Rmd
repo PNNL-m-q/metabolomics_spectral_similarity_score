@@ -100,20 +100,17 @@ distributions between true positives and true negatives.
 ## Add distribution properties 
 #Sum <- fread("~/Downloads/SumData.tsv")
 #
-SummaryStats <- do.call(bind_rows, lapply(ScoreMetadata$Score, function(x) {
-  c(
-    Score = x,
-    Sum_ScoreMin = Sum[[x]] %>% as.numeric() %>% min() %>% round(4),
-    Sum_ScoreMedian = Sum[[x]] %>% as.numeric() %>% median() %>% round(4),
-    Sum_ScoreMax = Sum[[x]] %>% as.numeric() %>% max() %>% round(4),
-    Max_ScoreMin = Max[[x]] %>% as.numeric() %>% min() %>% round(4),
-    Max_ScoreMedian = Max[[x]] %>% as.numeric() %>% median() %>% round(4),
-    Max_ScoreMax = Max[[x]] %>% as.numeric() %>% max() %>% round(4)
-  )
-}))
-
-ScoreMetadata <- ScoreMetadata %>% dplyr::select(-c(Sum_ScoreMin, Sum_ScoreMedian, Sum_ScoreMax))
-
+#SummaryStats <- do.call(bind_rows, lapply(ScoreMetadata$Score, function(x) {
+#  c(
+#    Score = x,
+#    Sum_ScoreMin = Sum[[x]] %>% as.numeric() %>% min() %>% round(4),
+#    Sum_ScoreMedian = Sum[[x]] %>% as.numeric() %>% median() %>% round(4),
+#    Sum_ScoreMax = Sum[[x]] %>% as.numeric() %>% max() %>% round(4),
+#    Max_ScoreMin = Max[[x]] %>% as.numeric() %>% min() %>% round(4),
+#    Max_ScoreMedian = Max[[x]] %>% as.numeric() %>% median() %>% round(4),
+#    Max_ScoreMax = Max[[x]] %>% as.numeric() %>% max() %>% round(4)
+#  )
+#}))
 #ScoreMetadata <- ScoreMetadata %>% merge(SummaryStats, by = "Score")
 
 ## T-Statistics for Sum
@@ -174,15 +171,21 @@ fore directionality) or a distance (typically unbounded on one or both sides)
 **Theoretical Bounds 2:** The bounds written in bracket format where a square bracket
 is inclusive and a parentheses is not inclusive. 
 
-**Sum Cluster:** The cluster number the score falls into for the sum data 
+**SumCluster:** The cluster number the score falls into for the sum data 
 
 **MaxCluster:** The cluster number the score falls into for the max data 
 
-**Min:** The score's minimum value
+**Sum_ScoreMin:** The score's minimum value in the sum dataset
 
-**Median:** The score's median value
+**Sum_ScoreMedian:** The score's median value in the sum dataset
 
-**Max:** The score's max value
+**Sum_ScoreMax:** The score's maximum value in the sum dataset 
+
+**Max_ScoreMin:** The score's minimum value in the max dataset
+
+**Max_ScoreMedian:** The score's median value in the max dataset
+
+**Max_ScoreMax:** The score's maximum value in the max dataset 
 
 **TStatisticSum:** The t-statistic between the true positives and true negatives
 for a score in the sum data 
@@ -201,7 +204,7 @@ set.seed(339)
 
 # Extract only Sum-Relevant Metadata
 SumMetadata <- ScoreMetadata %>% 
-  dplyr::select(SumCluster, Family, Type, TheoreticalBounds, Min, Median, Max, TStatisticSum) %>%
+  dplyr::select(SumCluster, Family, Type, TheoreticalBounds, Sum_ScoreMin, Sum_ScoreMedian, Sum_ScoreMax, TStatisticSum) %>%
   dplyr::mutate(
     SumCluster = factor(SumCluster, levels = 1:4),
     Family = as.factor(Family),
