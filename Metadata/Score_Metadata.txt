@@ -1,75 +1,75 @@
 Score	Family	Type	TheoreticalBounds	TheoreticalBounds2	SumCluster	MaxCluster	TStatisticSum	TStatisticMax	Sum_ScoreMin	Sum_ScoreMedian	Sum_ScoreMax	Max_ScoreMin	Max_ScoreMedian	Max_ScoreMax
-Additive Symmetric Chi Squared	Chi Squared	Distance	Left	[0, Inf)	3	2	-52.5971719709479	-75.2966193504344	204480027.0431	290797471500262	307758495292860032	568152911.2602	1592325892353365	863901294735698048
-Avg (L1, L8) Distance	Combination	Distance	Left	[0, Inf)	2	4	-432.798679262426	-398.15086142909	0.0116	0.9695	1.5	0.0258	3.9008	20.0035
-Battacharya Distance	Fidelity	Distance	Not	(-Inf, Inf)	2	4	-408.879396434348	-304.626068733252	0.0023	1.1798	15.8811	-2.5572	-0.21	14.9177
-Canberra Distance	L1 Distance	Distance	Left	[0, Inf)	4	3	-97.5896485668388	-91.5904458756067	7.4332	107.6117	465.2669	7.8574	107.6462	467.3437
-Canberra Metric	L1 Metric	Similarity	Both	[0, 1]	2	4	-219.494543796453	-219.468668036711	0.1499	0.9354	1	0.1553	0.9351	1
-Chebyshev Distance	LP Distance	Similarity	Both	[0, 1]	2	4	-286.323411271671	-256.770197732265	0.002	0.2753	1	0.0043	1	1
-Chernoff Distance	Fidelity	Distance	Not	(-Inf, Inf)	2	4	-460.247951907324	-267.030738270423	-0.4292	0.8247	3.3161	-3.1507	-0.502	2.8025
-Clark Distance	Chi Squared	Distance	Left	[0, Inf)	4	3	-110.504873533757	-108.182013750727	2.1477	10.2154	21.4232	2.2355	10.2188	21.3376
-Cosine Correlation	Inner Product	Similarity	Both	[0, 1]	1	1	512.380439331024	512.380439331835	0	0.214	1	0	0.214	1
-DFT Correlation	Inner Product	Similarity	Both	[-1, 1]	1	1	578.936077816468	578.936077817949	0	0.1964	0.9983	0	0.1964	0.9983
-DWT Correlation	Inner Product	Distance	Both	[-1, 1]	1	1	564.533280189979	564.53328018582	-0.3561	0.1392	0.9983	-0.3561	0.1392	0.9983
-Dice Similarity	Inner Product	Similarity	Both	[0, 1]	1	1	499.080446954581	499.599411722944	0	0.1968	1	0	0.2066	1
-Divergence Distance	Chi Squared	Distance	Left	[0, Inf)	4	3	-107.753021642851	-104.842941295035	9.2253	208.7098	917.9089	9.9952	208.8464	910.5874
-Euclidean Distance	LP Distance	Distance	Left	[0, Inf)	2	4	-343.882241098592	-363.530993544696	0.0036	0.4159	1.2012	0.008	1.6844	4.3837
-Fidelity Similarity	Fidelity	Distance	Left	[0, Inf)	1	1	549.011477404724	196.450644852747	0	0.3074	0.9977	0	1.2337	12.8993
-Generalized Ochai Index	Inner Product	Similarity	Both	[0, 1]	2	4	-456.706534792646	-475.645227871659	0.0106	0.8165	1	0.0103	0.814	1
-Gower Distance	L1 Distance	Distance	Left	[0, Inf)	2	4	-276.208885940736	-370.103467206103	1e-04	0.0134	0.1429	5e-04	0.0585	0.3999
-Harmonic mean Distance	Inner Product	Distance	Left	[0, Inf)	1	1	528.717526675262	207.383975419372	0	0.2507	0.9975	0	1.0214	12.71
-Hellinger Distance	Fidelity	Distance	Left	[0, Inf)	2	4	-424.960117736052	-411.564093275787	0.0958	1.6645	2	0.177	3.4457	8.4633
-Improved Square Root Cosine Similarity	Inner Product	Similarity	Both	[0, 1]	1	1	149.60968353274	149.609683537377	0	0.0079	0.1868	0	0.0079	0.1868
-Inner Product Distance	Inner Product	Distance	Right	(-Inf, 1]	2	4	-156.732982292044	-226.958065051005	0.4113	0.9784	1	-4.2957	0.6087	1
-Intersection Similarity	Intersection	Distance	Left	[0, Inf)	1	1	456.706534792625	212.455649832132	0	0.1835	0.9894	0	0.751	11.6982
-J Divergence	Shannon's Entropy	Distance	Left	[0, Inf)	2	4	-532.959957409087	-536.515536871655	0.0689	35.8727	68.0931	0.3292	159.0405	1037.868
-Jaccard Distance	Inner Product	Similarity	Both	[0, 1]	2	4	-423.758171914224	-424.577918514767	1e-04	0.8908	1	1e-04	0.8848	1
-Jensen Differences Distance	Shannon's Entropy	Distance	Left	[0, Inf)	2	4	-540.410235958972	-532.198143872463	0.0017	0.5026	0.6931	0.0055	2.1438	12.7084
-Jensen Shannon Index	Shannon's Entropy	Distance	Left	[0, Inf)	2	4	-540.410235958972	-532.198143872463	0.0017	0.5026	0.6931	0.0055	2.1438	12.7084
-K Divergence	Shannon's Entropy	Distance	Left	[0, Inf)	2	4	-498.812799153412	-260.866752753669	0.0019	0.5229	0.6931	-2.1889	1.8687	16.2675
-Kendall Tau Correlation	Correlative	Distance	Both	[-1, 1]	1	1	385.736541079864	385.736541079143	-0.7192	-0.2353	0.9331	-0.7192	-0.2353	0.9331
-Kulczynski 1 Distance	L1 Distance	Distance	Left	[0, Inf)	2	4	-25.340711247451	-31.4475306707428	0.0214	8.8965	1.71519e+14	0.0209	9.2817	111617166221696
-Kullback Leibler Divergence	Shannon's Entropy	Distance	Left	[0, Inf)	2	4	-589.88844228935	-477.907317940332	0.0164	13.7617	33.1517	-2.6675	52.2462	640.101
-Kumar Hassebrook Similarity	Inner Product	Similarity	Both	[0, 1]	1	1	423.758171916361	424.577918514767	0	0.1092	0.9999	0	0.1152	0.9999
-Kumar Johnson Distance	Combination	Distance	Left	[0, Inf)	3	2	-27.5089802240685	-46.1454750518766	16258121063530.6	4.0531231323949e+21	1.15269889668762e+26	41037681410717.3	2.33171055056538e+22	9.9996070652829e+25
-Kumar Johnson Divergence	Shannon's Entropy	Distance	Left	[0, Inf)	3	2	-27.5089802240685	-46.1454750518766	16258121063532.6	4.0531231323949e+21	1.15269889668762e+26	41037681410723.4	2.33171055056538e+22	9.9996070652829e+25
-Lorentzian Distance	L1 Distance	Distance	Left	[0, Inf)	2	4	-456.382121324885	-389.881994959814	0.0212	1.5455	1.958	0.0473	5.8716	32.1429
-Manhattan Distance	LP Distance	Distance	Left	[0, Inf)	2	4	-456.706534795	-406.477888733756	0.0212	1.6329	2	0.0474	6.8388	39.007
-Matusita Distance	Fidelity	Distance	Left	[0, Inf)	2	4	-424.960117735435	-411.564093275787	0.0677	1.177	1.4142	0.1251	2.4365	5.9845
-Max Symmetric Chi Squared Distance	Chi Squared	Distance	Left	[0, Inf)	3	2	-52.4619229156882	-75.2032691698814	204480027.0074	2.87664e+14	307758121104726016	568152911.1038	1584304598024995	863900841314761984
-Min Symmetric Chi Squared Distance	Chi Squared	Distance	Left	[0, Inf)	2	4	-405.267513246077	-526.679336307105	0.0208	1193131836969.27	244932898096928	0.068	6958104335282.25	99026497062792.4
-Minokowski 3 Distance	LP Distance	Distance	Left	[0, Inf)	2	4	-311.860149874084	-325.042646173735	0.0025	0.3265	1.0869	0.0054	1.2983	2.3258
-Minokowski 4 Distance	LP Distance	Distance	Left	[0, Inf)	2	4	-300.600659776371	-304.836375001019	0.0022	0.3018	1.0437	0.0048	1.1909	1.75
-Motyka Distance	Intersection	Similarity	Both	[0, 0.5]	1	1	456.706534795672	462.7248897232	0	0.0918	0.4947	0	0.0886	0.4948
-Neyman Chi Squared Distance	Chi Squared	Distance	Left	[0, Inf)	2	4	-304.248173458324	-490.420573211928	0.0412	1195865091906.41	249809999999851	0.1986	7016612472947.5	99570731125572.1
-Pearson Chi Squared Distance	Chi Squared	Distance	Left	[0, Inf)	3	2	-52.4604458481333	-75.2034341320159	0.0208	2.87664e+14	307758121104726016	0.068	1584304598024995	863900841314761984
-Pearson Correlation	Correlative	Distance	Both	[-1, 1]	1	1	513.203161101548	513.203161101831	-0.3975	0.1479	1	-0.3975	0.1479	1
-Probabilistic symmetric X2 Distance	Chi Squared	Distance	Left	[0, Inf)	2	4	-528.717526677172	-514.735296394081	0.0102	2.9972	4	0.0329	12.7364	74.6487
-Roberts Distance	L1 Distance	Similarity	Both	[0, 1]	2	4	-397.792474857329	-409.805477257965	0.0173	0.865	1	0.0168	0.8689	1
-Ruzicka Distance	L1 Distance	Similarity	Both	[0, 1]	2	4	-373.369011238031	-376.274379569762	0.021	0.899	1	0.0205	0.9027	1
-Soergel Distance	L1 Distance	Similarity	Both	[0, 1]	2	4	-373.369011238031	-376.274379569762	0.021	0.899	1	0.0205	0.9027	1
-Sorensen Distance	LP Distance	Similarity	Both	[0, 1]	2	4	-456.706534792646	-462.7248897232	0.0106	0.8165	1	0.0103	0.8227	1
-Spearman Correlation	Correlative	Distance	Both	[-1, 1]	1	1	408.782881588287	408.782881589571	-0.8729	-0.2979	0.9856	-0.8729	-0.2979	0.9856
-Spectral Contrast Angle	Inner Product	Distance	Left	[0, Inf)	2	4	-418.854800577519	-418.854800577542	0.0072	1.3552	1.5708	0.0072	1.3552	1.5708
-Spectral Similarity Score	Combined RI	Similarity	Both	[0, 1]	1	1	512.380439331024	512.380439331835	0	0.214	1	0	0.214	1
-Square Root Cosine Correlation	Inner Product	Similarity	Both	[0, 1]	1	1	549.011477404725	191.088745298145	0	0.3074	0.9977	0	0.0688	0.6023
-Squared Chi Squared Distance	Chi Squared	Distance	Left	[0, Inf)	2	4	-528.717526676204	-514.735296394081	0.0051	1.4986	2	0.0164	6.3682	37.3243
-Squared Euclidean Distance	Chi Squared	Distance	Left	[0, Inf)	2	4	-346.364110327776	-471.740182063103	0	0.173	1.4429	1e-04	2.8371	19.2168
-Squared-chord Distance	Fidelity	Distance	Left	[0, Inf)	2	4	-549.011477404953	-545.219511545657	0.0046	1.3853	2	0.0157	5.9364	35.8139
-Stein Scott Similarity	Inner Product	Similarity	Both	[0, 1]	1	1	514.792353387302	514.792353382111	0	0.1348	0.9728	0	0.1348	0.9728
-Stein Scott Similarity Nist	Inner Product	Similarity	Both	[0, 1]	1	1	559.894561779125	559.894561779939	0	0.1832	0.9726	0	0.1832	0.9726
-Symmetric Chi Squared Distance	Chi Squared	Distance	Left	[0, Inf)	3	2	-63.5874976394918	-89.6669743833041	2.28354e+11	4142782033592390	968864961616025984	194583294967.334	4856728890664585	1758465689602040064
-Taneja Divergence	Combination	Distance	Left	[0, Inf)	2	4	-531.565019768114	-535.077911467168	0.0141	8.4552	16.3301	0.0672	37.6282	247.0235
-Topsoe Distance	Shannon's Entropy	Distance	Left	[0, Inf)	2	4	-540.410235957724	-532.198143872463	0.0033	1.0053	1.3863	0.0111	4.2875	25.4167
-VW1	Vicis Wave Hedges	Distance	Left	[0, Inf)	3	2	-63.5874975953866	-89.6669743833042	2.28354e+11	4142782033592430	968864961616025984	194583294986.22	4856728890664710	1758465689602040064
-VW2	Vicis Wave Hedges	Distance	Left	[0, Inf)	3	2	-11.5902801603432	-39.4838297959121	6.61288407274077e+21	2.00778e+30	3.78171068000474e+35	5.68152911018018e+21	2.66061786152248e+30	7.23074982976037e+34
-VW3	Vicis Wave Hedges	Distance	Left	[0, Inf)	3	2	-52.5971719709479	-75.2966193504343	204480027.0134	290797471500260	307758495292860032	568152911.1416	1592325892353355	863901294735698048
-VW4	Vicis Wave Hedges	Distance	Left	[0, Inf)	2	4	-509.342528639888	-486.927613277205	0.0058	1.5415	2	0.0177	6.5195	37.8958
-VW5	Vicis Wave Hedges	Distance	Left	[0, Inf)	3	2	-52.4619229156882	-75.2032691698814	204480027.0074	2.87664e+14	307758121104726016	568152911.1038	1584304598024995	863900841314761984
-VW6	Vicis Wave Hedges	Distance	Left	[0, Inf)	2	4	-405.267513246077	-526.679336307105	0.0208	1193131836969.27	244932898096928	0.068	6958104335282.25	99026497062792.4
-Vicis Wave Hadges Distance	Vicis Wave Hedges	Distance	Left	[0, Inf)	3	2	-63.5874975953866	-89.6669743833042	2.28354e+11	4142782033592430	968864961616025984	194583294986.22	4856728890664710	1758465689602040064
-Vicis-Symmetric X2 1 Distance	Chi Squared	Distance	Left	[0, Inf)	3	2	-11.5902801603432	-39.4838297959121	6.61288407274077e+21	2.00778e+30	3.78171068000474e+35	5.68152911018018e+21	2.66061786152248e+30	7.23074982976037e+34
-Vicis-Symmetric X2 2 Distance	Chi Squared	Distance	Left	[0, Inf)	3	2	-52.5971719709479	-75.2966193504343	204480027.0134	290797471500260	307758495292860032	568152911.1416	1592325892353355	863901294735698048
-Vicis-Symmetric X2 3 Distance	Chi Squared	Distance	Left	[0, Inf)	2	4	-509.342528639888	-486.927613277205	0.0058	1.5415	2	0.0177	6.5195	37.8958
-Wave Hedges Distance	Intersection	Distance	Left	[0, Inf)	4	3	-88.3777637515242	-80.5940048990862	8.3773	109.8349	469.3795	8.6915	109.8459	482.2998
-Weighted Cosine Correlation	Inner Product	Similarity	Both	[0, 1]	1	1	556.71708761292	556.717087617154	0	0.1095	0.9984	0	0.1095	0.9984
-Whittaker index of association Distance	Shannon's Entropy	Distance	Left	[0, Inf)	4	3	-354.372758227671	-354.372758227659	0.9432	93.6358	440.3316	0.9432	93.6358	440.3316
+Additive Symmetric Chi Squared	Chi Squared	Distance	Left	"[0, Inf)"	3	2	-52.59717197	-75.29661935	204480027	2.90797E+14	3.07758E+17	568152911.3	1.59233E+15	8.63901E+17
+"Avg (L1, L8) Distance"	Combination	Distance	Left	"[0, Inf)"	2	4	-432.7986793	-398.1508614	0.0116	0.9695	1.5	0.0258	3.9008	20.0035
+Battacharya Distance	Fidelity	Distance	Not	"(-Inf, Inf)"	2	4	-408.8793964	-304.6260687	0.0023	1.1798	15.8811	-2.5572	-0.21	14.9177
+Canberra Distance	L1 Distance	Distance	Left	"[0, Inf)"	4	3	-97.58964857	-91.59044588	7.4332	107.6117	465.2669	7.8574	107.6462	467.3437
+Canberra Metric	L1 Metric	Similarity	Both	"[0, 1]"	2	4	-219.4945438	-219.468668	0.1499	0.9354	1	0.1553	0.9351	1
+Chebyshev Distance	LP Distance	Similarity	Both	"[0, 1]"	2	4	-286.3234113	-256.7701977	0.002	0.2753	1	0.0043	1	1
+Chernoff Distance	Fidelity	Distance	Not	"(-Inf, Inf)"	2	4	-460.2479519	-267.0307383	-0.4292	0.8247	3.3161	-3.1507	-0.502	2.8025
+Clark Distance	Chi Squared	Distance	Left	"[0, Inf)"	4	3	-110.5048735	-108.1820138	2.1477	10.2154	21.4232	2.2355	10.2188	21.3376
+Cosine Correlation	Inner Product	Similarity	Both	"[0, 1]"	1	1	512.3804393	512.3804393	0	0.214	1	0	0.214	1
+DFT Correlation	Inner Product	Similarity	Both	"[-1, 1]"	1	1	578.9360778	578.9360778	0	0.1964	0.9983	0	0.1964	0.9983
+DWT Correlation	Inner Product	Similarity	Both	"[-1, 1]"	1	1	564.5332802	564.5332802	-0.3561	0.1392	0.9983	-0.3561	0.1392	0.9983
+Dice Similarity	Inner Product	Similarity	Both	"[0, 1]"	1	1	499.080447	499.5994117	0	0.1968	1	0	0.2066	1
+Divergence Distance	Chi Squared	Distance	Left	"[0, Inf)"	4	3	-107.7530216	-104.8429413	9.2253	208.7098	917.9089	9.9952	208.8464	910.5874
+Euclidean Distance	LP Distance	Distance	Left	"[0, Inf)"	2	4	-343.8822411	-363.5309935	0.0036	0.4159	1.2012	0.008	1.6844	4.3837
+Fidelity Similarity	Fidelity	Distance	Left	"[0, Inf)"	1	1	549.0114774	196.4506449	0	0.3074	0.9977	0	1.2337	12.8993
+Generalized Ochai Index	Inner Product	Similarity	Both	"[0, 1]"	2	4	-456.7065348	-475.6452279	0.0106	0.8165	1	0.0103	0.814	1
+Gower Distance	L1 Distance	Distance	Left	"[0, Inf)"	2	4	-276.2088859	-370.1034672	1.00E-04	0.0134	0.1429	5.00E-04	0.0585	0.3999
+Harmonic mean Distance	Inner Product	Distance	Left	"[0, Inf)"	1	1	528.7175267	207.3839754	0	0.2507	0.9975	0	1.0214	12.71
+Hellinger Distance	Fidelity	Distance	Left	"[0, Inf)"	2	4	-424.9601177	-411.5640933	0.0958	1.6645	2	0.177	3.4457	8.4633
+Improved Square Root Cosine Similarity	Inner Product	Similarity	Both	"[0, 1]"	1	1	149.6096835	149.6096835	0	0.0079	0.1868	0	0.0079	0.1868
+Inner Product Distance	Inner Product	Distance	Right	"(-Inf, 1]"	2	4	-156.7329823	-226.9580651	0.4113	0.9784	1	-4.2957	0.6087	1
+Intersection Similarity	Intersection	Distance	Left	"[0, Inf)"	1	1	456.7065348	212.4556498	0	0.1835	0.9894	0	0.751	11.6982
+J Divergence	Shannon's Entropy	Distance	Left	"[0, Inf)"	2	4	-532.9599574	-536.5155369	0.0689	35.8727	68.0931	0.3292	159.0405	1037.868
+Jaccard Distance	Inner Product	Similarity	Both	"[0, 1]"	2	4	-423.7581719	-424.5779185	1.00E-04	0.8908	1	1.00E-04	0.8848	1
+Jensen Differences Distance	Shannon's Entropy	Distance	Left	"[0, Inf)"	2	4	-540.410236	-532.1981439	0.0017	0.5026	0.6931	0.0055	2.1438	12.7084
+Jensen Shannon Index	Shannon's Entropy	Distance	Left	"[0, Inf)"	2	4	-540.410236	-532.1981439	0.0017	0.5026	0.6931	0.0055	2.1438	12.7084
+K Divergence	Shannon's Entropy	Distance	Left	"[0, Inf)"	2	4	-498.8127992	-260.8667528	0.0019	0.5229	0.6931	-2.1889	1.8687	16.2675
+Kendall Tau Correlation	Correlative	Similarity	Both	"[-1, 1]"	1	1	385.7365411	385.7365411	-0.7192	-0.2353	0.9331	-0.7192	-0.2353	0.9331
+Kulczynski 1 Distance	L1 Distance	Distance	Left	"[0, Inf)"	2	4	-25.34071125	-31.44753067	0.0214	8.8965	1.72E+14	0.0209	9.2817	1.11617E+14
+Kullback Leibler Divergence	Shannon's Entropy	Distance	Left	"[0, Inf)"	2	4	-589.8884423	-477.9073179	0.0164	13.7617	33.1517	-2.6675	52.2462	640.101
+Kumar Hassebrook Similarity	Inner Product	Similarity	Both	"[0, 1]"	1	1	423.7581719	424.5779185	0	0.1092	0.9999	0	0.1152	0.9999
+Kumar Johnson Distance	Combination	Distance	Left	"[0, Inf)"	3	2	-27.50898022	-46.14547505	1.62581E+13	4.05E+21	1.15E+26	4.10377E+13	2.33E+22	1.00E+26
+Kumar Johnson Divergence	Shannon's Entropy	Distance	Left	"[0, Inf)"	3	2	-27.50898022	-46.14547505	1.62581E+13	4.05E+21	1.15E+26	4.10377E+13	2.33E+22	1.00E+26
+Lorentzian Distance	L1 Distance	Distance	Left	"[0, Inf)"	2	4	-456.3821213	-389.881995	0.0212	1.5455	1.958	0.0473	5.8716	32.1429
+Manhattan Distance	LP Distance	Distance	Left	"[0, Inf)"	2	4	-456.7065348	-406.4778887	0.0212	1.6329	2	0.0474	6.8388	39.007
+Matusita Distance	Fidelity	Distance	Left	"[0, Inf)"	2	4	-424.9601177	-411.5640933	0.0677	1.177	1.4142	0.1251	2.4365	5.9845
+Max Symmetric Chi Squared Distance	Chi Squared	Distance	Left	"[0, Inf)"	3	2	-52.46192292	-75.20326917	204480027	2.88E+14	3.07758E+17	568152911.1	1.5843E+15	8.63901E+17
+Min Symmetric Chi Squared Distance	Chi Squared	Distance	Left	"[0, Inf)"	2	4	-405.2675132	-526.6793363	0.0208	1.19313E+12	2.44933E+14	0.068	6.9581E+12	9.90265E+13
+Minokowski 3 Distance	LP Distance	Distance	Left	"[0, Inf)"	2	4	-311.8601499	-325.0426462	0.0025	0.3265	1.0869	0.0054	1.2983	2.3258
+Minokowski 4 Distance	LP Distance	Distance	Left	"[0, Inf)"	2	4	-300.6006598	-304.836375	0.0022	0.3018	1.0437	0.0048	1.1909	1.75
+Motyka Distance	Intersection	Distance	Both	"[0, 0.5]"	1	1	456.7065348	462.7248897	0	0.0918	0.4947	0	0.0886	0.4948
+Neyman Chi Squared Distance	Chi Squared	Distance	Left	"[0, Inf)"	2	4	-304.2481735	-490.4205732	0.0412	1.19587E+12	2.4981E+14	0.1986	7.01661E+12	9.95707E+13
+Pearson Chi Squared Distance	Chi Squared	Distance	Left	"[0, Inf)"	3	2	-52.46044585	-75.20343413	0.0208	2.88E+14	3.07758E+17	0.068	1.5843E+15	8.63901E+17
+Pearson Correlation	Correlative	Similarity	Both	"[-1, 1]"	1	1	513.2031611	513.2031611	-0.3975	0.1479	1	-0.3975	0.1479	1
+Probabilistic symmetric X2 Distance	Chi Squared	Distance	Left	"[0, Inf)"	2	4	-528.7175267	-514.7352964	0.0102	2.9972	4	0.0329	12.7364	74.6487
+Roberts Distance	L1 Distance	Similarity	Both	"[0, 1]"	2	4	-397.7924749	-409.8054773	0.0173	0.865	1	0.0168	0.8689	1
+Ruzicka Distance	L1 Distance	Similarity	Both	"[0, 1]"	2	4	-373.3690112	-376.2743796	0.021	0.899	1	0.0205	0.9027	1
+Soergel Distance	L1 Distance	Similarity	Both	"[0, 1]"	2	4	-373.3690112	-376.2743796	0.021	0.899	1	0.0205	0.9027	1
+Sorensen Distance	LP Distance	Similarity	Both	"[0, 1]"	2	4	-456.7065348	-462.7248897	0.0106	0.8165	1	0.0103	0.8227	1
+Spearman Correlation	Correlative	Similarity	Both	"[-1, 1]"	1	1	408.7828816	408.7828816	-0.8729	-0.2979	0.9856	-0.8729	-0.2979	0.9856
+Spectral Contrast Angle	Inner Product	Distance	Left	"[0, Inf)"	2	4	-418.8548006	-418.8548006	0.0072	1.3552	1.5708	0.0072	1.3552	1.5708
+Spectral Similarity Score	Combined RI	Similarity	Both	"[0, 1]"	1	1	512.3804393	512.3804393	0	0.214	1	0	0.214	1
+Square Root Cosine Correlation	Inner Product	Similarity	Both	"[0, 1]"	1	1	549.0114774	191.0887453	0	0.3074	0.9977	0	0.0688	0.6023
+Squared Chi Squared Distance	Chi Squared	Distance	Left	"[0, Inf)"	2	4	-528.7175267	-514.7352964	0.0051	1.4986	2	0.0164	6.3682	37.3243
+Squared Euclidean Distance	Chi Squared	Distance	Left	"[0, Inf)"	2	4	-346.3641103	-471.7401821	0	0.173	1.4429	1.00E-04	2.8371	19.2168
+Squared-chord Distance	Fidelity	Distance	Left	"[0, Inf)"	2	4	-549.0114774	-545.2195115	0.0046	1.3853	2	0.0157	5.9364	35.8139
+Stein Scott Similarity	Inner Product	Similarity	Both	"[0, 1]"	1	1	514.7923534	514.7923534	0	0.1348	0.9728	0	0.1348	0.9728
+Stein Scott Similarity Nist	Inner Product	Similarity	Both	"[0, 1]"	1	1	559.8945618	559.8945618	0	0.1832	0.9726	0	0.1832	0.9726
+Symmetric Chi Squared Distance	Chi Squared	Distance	Left	"[0, Inf)"	3	2	-63.58749764	-89.66697438	2.28E+11	4.14278E+15	9.68865E+17	1.94583E+11	4.85673E+15	1.75847E+18
+Taneja Divergence	Combination	Distance	Left	"[0, Inf)"	2	4	-531.5650198	-535.0779115	0.0141	8.4552	16.3301	0.0672	37.6282	247.0235
+Topsoe Distance	Shannon's Entropy	Distance	Left	"[0, Inf)"	2	4	-540.410236	-532.1981439	0.0033	1.0053	1.3863	0.0111	4.2875	25.4167
+VW1	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	3	2	-63.5874976	-89.66697438	2.28E+11	4.14278E+15	9.68865E+17	1.94583E+11	4.85673E+15	1.75847E+18
+VW2	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	3	2	-11.59028016	-39.4838298	6.61E+21	2.01E+30	3.78E+35	5.68E+21	2.66E+30	7.23E+34
+VW3	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	3	2	-52.59717197	-75.29661935	204480027	2.90797E+14	3.07758E+17	568152911.1	1.59233E+15	8.63901E+17
+VW4	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	2	4	-509.3425286	-486.9276133	0.0058	1.5415	2	0.0177	6.5195	37.8958
+VW5	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	3	2	-52.46192292	-75.20326917	204480027	2.88E+14	3.07758E+17	568152911.1	1.5843E+15	8.63901E+17
+VW6	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	2	4	-405.2675132	-526.6793363	0.0208	1.19313E+12	2.44933E+14	0.068	6.9581E+12	9.90265E+13
+Vicis Wave Hadges Distance	Vicis Wave Hedges	Distance	Left	"[0, Inf)"	3	2	-63.5874976	-89.66697438	2.28E+11	4.14278E+15	9.68865E+17	1.94583E+11	4.85673E+15	1.75847E+18
+Vicis-Symmetric X2 1 Distance	Chi Squared	Distance	Left	"[0, Inf)"	3	2	-11.59028016	-39.4838298	6.61E+21	2.01E+30	3.78E+35	5.68E+21	2.66E+30	7.23E+34
+Vicis-Symmetric X2 2 Distance	Chi Squared	Distance	Left	"[0, Inf)"	3	2	-52.59717197	-75.29661935	204480027	2.90797E+14	3.07758E+17	568152911.1	1.59233E+15	8.63901E+17
+Vicis-Symmetric X2 3 Distance	Chi Squared	Distance	Left	"[0, Inf)"	2	4	-509.3425286	-486.9276133	0.0058	1.5415	2	0.0177	6.5195	37.8958
+Wave Hedges Distance	Intersection	Distance	Left	"[0, Inf)"	4	3	-88.37776375	-80.5940049	8.3773	109.8349	469.3795	8.6915	109.8459	482.2998
+Weighted Cosine Correlation	Inner Product	Similarity	Both	"[0, 1]"	1	1	556.7170876	556.7170876	0	0.1095	0.9984	0	0.1095	0.9984
+Whittaker index of association Distance	Shannon's Entropy	Distance	Left	"[0, Inf)"	4	3	-354.3727582	-354.3727582	0.9432	93.6358	440.3316	0.9432	93.6358	440.3316
