@@ -1,22 +1,13 @@
-__loadDisplayList__61ab0fed([
-  {
-    "group": "common",
-    "name": "Max",
-    "desc": "",
-    "n": 60,
-    "height": 500,
-    "width": 500,
-    "updated": "2022-10-24 21:47:19",
-    "keySig": "41286d98fe6599174617660f8c6b4451"
-  },
+__loadDisplayList__e946e684([
   {
     "group": "common",
     "name": "Sum",
     "desc": "",
-    "n": 60,
+    "n": 74,
+    "order": 1,
     "height": 500,
     "width": 500,
-    "updated": "2022-10-24 21:49:13",
-    "keySig": "41286d98fe6599174617660f8c6b4451"
+    "updated": "2023-06-30 14:16:59",
+    "keySig": "67052c86ffad96894fc43b85c66d153a"
   }
 ])

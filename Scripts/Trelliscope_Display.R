@@ -8,72 +8,26 @@ library(cowplot)
 library(doParallel)
 library(foreach)
 
-## First SS analysis 
-setwd("~/Desktop/MQ/Similarity_Metrics_Paper/FilesFromLisa/")
+# 1. Pull score metadata
+ScoreMetadata <- fread("~/Git_Repos/metabolomics_spectral_similarity_score/Metadata/Score_Metadata.txt")
 
-# 0. Load names of scores
-Name_Maps <- fread("cname_mapping.csv")
-Name_Maps$Sum_Metric_cnames[46] <- "Squared-chord Distance"
-
-# 1. Identify similarities (0-1) and distances 
-MaxEx1 <- fread("/Users/degn400/Desktop/MQ/MQ_Data/Final_Dataset/MAX/Urine_01_Max_Abundance_TruthAnnotatedFeb2022.tsv")
-
-## Define metric types
-MetricTypes <- data.table(
-  "Score" = colnames(MaxEx1)[13:85],
-  "Type" = lapply(colnames(MaxEx1)[13:85], function(x) {
-    if (grepl("Distance", x)) {return("Distance")}
-    if (max(MaxEx1[[x]], na.rm = T) <= 1)  {"Similarity"} else{"Distance"}
-  }) %>% unlist()
-)
-  
 # 2. SUM: Load all data
-SUM <- lapply(list.files("~/Desktop/MQ/MQ_Data/Final_Dataset/SUM/", full.names = T), function(path) {
-  message(path)
-  return(fread(path))
-})
-saveRDS(SUM, "~/Downloads/SUM.RDS")
-SUM <- readRDS("~/Downloads/SUM.RDS")
+SUM <- fread("~/Downloads/SumData.tsv")
 
 # 3. MAX: Load all data 
-MAX <- lapply(list.files("~/Desktop/MQ/MQ_Data/Final_Dataset/MAX/", full.names = T), function(path) {
-  message(path)
-  data <- fread(path)
-  data$`Vicis Wave Hadges Distance` <- as.numeric(data$`Vicis Wave Hadges Distance`)
-  return(data)
-})
-saveRDS(MAX, "~/Downloads/MAX.RDS")
-MAX <- readRDS("~/Downloads/MAX.RDS")
+MAX <- fread("~/Downloads/MaxData.tsv")
 
-# 4. RAW: Load all data 
-RAW <- lapply(list.files("~/Desktop/MQ/MQ_Data/Final_Dataset/RAW/", full.names = T), function(path) {
-  message(path)
-  return(fread(path))
-})
-saveRDS(RAW, "~/Downloads/RAW.RDS")
-RAW <- readRDS("~/Downloads/RAW.RDS")
-
-## Double check counts of identifications
-DC <- data.frame(
-  "Names" = list.files("~/Desktop/MQ/MQ_Data/Final_Dataset/RAW/") %>% unlist(),
-  "SUM" = lapply(SUM, nrow) %>% unlist(), 
-  "MAX" = lapply(MAX, nrow) %>% unlist(),
-  "RAW" = lapply(RAW, nrow) %>% unlist()
-) %>% dplyr::mutate(
-  "NoFixes" = SUM == MAX & MAX == RAW
-)
-
-extractScore <- function(Score) {
+# 4. Write a function to extract the score for sum and max datasets
+extractScore <- function(Dataset, Score) {
+  
+  message(Score)
   
   # Pull all the data associated with the score
-  Data <- do.call(bind_rows, lapply(SUM, function(x) {
-    Res <- x %>% dplyr::select(!!Score, Truth.Annotation)
-    Res[[Score]] <- as.numeric(Res[[Score]])
-    return(Res)
-  }))
+  Data <- Dataset %>% dplyr::select(!!Score, Truth.Annotation)
   Data$Truth.Annotation <- gsub(".", " ", Data$Truth.Annotation, fixed = T)
   Data$Truth.Annotation[Data$Truth.Annotation == ""] <- "Unknown"
   Data$Truth.Annotation <- factor(Data$Truth.Annotation, levels = c("True Positive", "True Negative", "Unknown"))
+  Data[[Score]] <- as.numeric(Data[[Score]])
   
   attr(Data, "Transformed") <- "Not transformed"
   
@@ -88,18 +42,83 @@ extractScore <- function(Score) {
   return(Data)
 }
 
+# 5. Extend score metadata to hold cases where max should be held or not
+ScoreData_Sum <- lapply(unlist(ScoreMetadata$Score), function(x) {extractScore(SUM, x)})
+names(ScoreData_Sum) <- unlist(ScoreMetadata$Score)
 
-# Start dataframe to hold all scores 
-ScoreMeta <- data.table(
-  Scores = Name_Maps$Sum_Metric_cnames %>% gsub(pattern = "_", replacement = " "),
-  IncludeMA = Name_Maps$Sum_Metric_cnames %in% Name_Maps$Max_Metric_cnames
-) 
-ScoreData <- lapply(unlist(ScoreMeta$Scores), function(x) {message(x); extractScore(x)})
+# 6. Create an overlap score function
+calc_overlap <- function(data) {
 
-# SUM plots
+  # Rename first column to make it easier
+  colnames(data)[[1]] <- "Score"
+  
+  # Pull score
+  score <- data %>% filter(Truth.Annotation %in% c("True Negative", "Unknown"))
+  max <- max(score$Score, na.rm = T)
+  min <- min(score$Score, na.rm = T)
+  third <- quantile(score$Score, probs = 0.75, na.rm = T)
+  first <- quantile(score$Score, probs = 0.25, na.rm = T)
+  
+  # Get overlap
+  overlap <- data %>%
+    dplyr::filter(Truth.Annotation == "True Positive") %>%
+    dplyr::mutate(
+      Overlap = Score <= third & Score >= first
+    )
+  
+  # Calculate overlap 
+  return(
+    round(sum(overlap$Overlap) / nrow(overlap), 8)
+  )
+
+}
+
+# 7. Add overlap score to ScoreMetadata
+OS <- lapply(ScoreData_Sum, function(x) {calc_overlap(x)}) %>% unlist()
+ScoreMetadata$Overlap <- OS
+
+# 8. Make trelliscope display
+PreTrelli <- ScoreMetadata %>%
+  mutate(
+    Cluster = SumCluster,
+    TStatistic = TStatisticSum,
+    ScoreMin = Sum_ScoreMin,
+    ScoreMax = Sum_ScoreMax,
+    Overlap = OS
+  ) %>%
+  dplyr::select(Score, Family, Type, Cluster, TStatistic, Overlap, TheoreticalBounds) 
+
+test <- PreTrelli %>%
+  group_by(Score) %>%
+  mutate(
+    panel = map_plot(Score, function(x) {
+      data <- ScoreData_Sum[[Score]]
+      colnames(data) <- c("Score", "Truth Annotation")
+      ggplot(data, aes(x = `Truth Annotation`, fill = `Truth Annotation`, y = Score)) +
+        geom_boxplot() + 
+        theme_bw() + 
+        ylab(ifelse(attr(data, "Transformed") == "Transformed", "Transformed Score", "Score")) + 
+        ggtitle(Score)
+    }),
+    cogs = map_cog(Score, function(x) {
+      tibble(
+        Family = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Family) %>% unlist(), desc = "Family"),
+        Type = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Type) %>% unlist(), desc = "Type"),
+        `Theoretical Bounds` = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(TheoreticalBounds) %>% unlist(), desc = "Theoretical Bounds"),
+        Cluster = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Cluster) %>% unlist() %>% as.factor(), desc = "Cluster"),
+        TStatistic = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(TStatistic) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic"),
+        Overlap = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Overlap) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap")
+      )})
+    ) #%>%
+  #dplyr::select(Score, panel, cogs) %>%
+  #trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
+  
+
+
+
 registerDoParallel(detectCores())
-foreach(n = 1:length(ScoreData)) %dopar% {
-  data <- ScoreData[[n]]
+foreach(n = 1:length(ScoreData_Sum)) %dopar% {
+  data <- ScoreData_Sum[[n]]
   plot <- ggplot(data, aes(x = `Truth.Annotation`, y = data[[1]], fill = `Truth.Annotation`)) +
     geom_boxplot() + theme_bw() + theme(legend.position = "none") + xlab("Truth Annotation") + 
     ggtitle(attr(data, "Transformed")) + ylab(colnames(data)[1])

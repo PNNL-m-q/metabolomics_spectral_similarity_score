@@ -1,4 +1,4 @@
-__loadTrscopeConfig__61ab0fed({
+__loadTrscopeConfig__e946e684({
   "display_base": "displays",
   "data_type": "jsonp",
   "cog_server": {
@@ -8,5 +8,7 @@ __loadTrscopeConfig__61ab0fed({
     }
   },
   "split_layout": false,
-  "has_legend": false
+  "has_legend": false,
+  "require_token": false,
+  "disclaimer": false
 })
