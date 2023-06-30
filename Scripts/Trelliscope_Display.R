@@ -44,7 +44,7 @@ extractScore <- function(Dataset, Score) {
 
 # 5. Extend score metadata to hold cases where max should be held or not
 ScoreData_Sum <- lapply(unlist(ScoreMetadata$Score), function(x) {extractScore(SUM, x)})
-names(ScoreData_Sum) <- unlist(ScoreMetadata$Score)
+ScoreData_Max <- lapply(unlist(ScoreMetadata$Score), function(x) {extractScore(MAX, x)})
 
 # 6. Create an overlap score function
 calc_overlap <- function(data) {
@@ -68,17 +68,19 @@ calc_overlap <- function(data) {
   
   # Calculate overlap 
   return(
-    round(sum(overlap$Overlap) / nrow(overlap), 8)
+    round(sum(overlap$Overlap, na.rm = T) / nrow(overlap), 8)
   )
 
 }
 
 # 7. Add overlap score to ScoreMetadata
 OS <- lapply(ScoreData_Sum, function(x) {calc_overlap(x)}) %>% unlist()
-ScoreMetadata$Overlap <- OS
-fwrite(ScoreMetadata, "~/Downloads/ScoreMetadata_Store.csv", row.names = F, quote = F)
+OS2 <- lapply(ScoreData_Max, function(x) {calc_overlap(x)}) %>% unlist()
+ScoreMetadata$Overlap_Sum <- OS
+ScoreMetadata$Overlap_Max <- OS2
+fwrite(ScoreMetadata, "~/Git_Repos/metabolomics_spectral_similarity_score/Metadata/Score_Metadata.txt", row.names = F, quote = F, sep = "\t")
 
-# 8. Make and hold plots 
+# 8. SUM: Make and hold plots 
 lapply(1:length(ScoreData_Sum), function(n) {
   message(ScoreMetadata$Score[n])
   data <- ScoreData_Sum[[n]]
@@ -91,7 +93,7 @@ lapply(1:length(ScoreData_Sum), function(n) {
   ggsave(file.path("~/Downloads/HoldPlots/SUM", paste0(ScoreMetadata$Score[n], ".png")), plot = plot)
 })
 
-# 9. Make trelliscope display      
+# 9. SUM: Make trelliscope display      
 ScoreMetadata %>%      
   mutate(
     panel = map_plot(Score, function(x) {
@@ -103,107 +105,17 @@ ScoreMetadata %>%
         Type = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Type) %>% unlist(), desc = "Type"),
         `Theoretical Bounds` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TheoreticalBounds) %>% unlist(), desc = "Theoretical Bounds"),
         Cluster = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(SumCluster) %>% unlist() %>% as.factor(), desc = "Cluster"),
-        TStatistic = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticSum) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic"),
-        Overlap = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap")
+        `Sum TStatistic` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticSum) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic"),
+        `Sum Overlap` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap_Sum) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap_Sum")
       )})
     ) %>%
   dplyr::select(Score, panel, cogs) %>%
   trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
+
+# 10. MAX: Make and hold plots 
   
 
 
 
-registerDoParallel(detectCores())
-foreach(n = 1:length(ScoreData_Sum)) %dopar% {
-  data <- ScoreData_Sum[[n]]
-  plot <- ggplot(data, aes(x = `Truth.Annotation`, y = data[[1]], fill = `Truth.Annotation`)) +
-    geom_boxplot() + theme_bw() + theme(legend.position = "none") + xlab("Truth Annotation") + 
-    ggtitle(attr(data, "Transformed")) + ylab(colnames(data)[1])
-  ggsave(paste0("~/Desktop/HoldPlots/Sum/", colnames(data)[[1]], ".png"), plot)
-}
-
-fix1 <- ScoreData[[50]]
-fix2[fix2$VW1 > 50, "VW1"] <- log10(1 / (fix2[fix2$VW1 > 50, "VW1"] %>% unlist()))
-fix2 <- fix2[!is.infinite(fix2$VW1),]
-fix2 <- ScoreData[[53]]
-
-plot <- ggplot(fix2, aes(x = `Truth.Annotation`, y = VW1, fill = `Truth.Annotation`)) +
-  geom_boxplot() + theme_bw() + theme(legend.position = "none") + xlab("Truth Annotation") + 
-  ggtitle(attr(fix1, "Transformed")) + ylab(colnames(fix2)[1])
-ggsave(paste0("~/Desktop/HoldPlots/Sum/", colnames(fix2)[1], ".png"), plot)
-
-
-# Create sum trelliscope
-ScoreMeta %>%
-  mutate(
-    panel = map_plot(Scores, function(x) {
-      ggdraw() + draw_image(paste0("~/Desktop/HoldPlots/Sum/", x, ".png"))
-    })
-  ) %>%
-  trelliscope(name = "Sum", path = "~/Downloads/SS_Scores/")
-
-## MAX plots
-
-extractScoreMAX <- function(Score) {
-  
-  # Pull all the data associated with the score
-  Data <- do.call(bind_rows, lapply(MAX, function(x) {
-    Res <- x %>% dplyr::select(!!Score, Truth.Annotation)
-    Res[[Score]] <- as.numeric(Res[[Score]])
-    return(Res)
-  }))
-  Data$Truth.Annotation <- gsub(".", " ", Data$Truth.Annotation, fixed = T)
-  Data$Truth.Annotation[Data$Truth.Annotation == ""] <- "Unknown"
-  Data$Truth.Annotation <- factor(Data$Truth.Annotation, levels = c("True Positive", "True Negative", "Unknown"))
-  
-  attr(Data, "Transformed") <- "Not transformed"
-  
-  # If score is greater than 1000, than take 1/log10(Score)
-  if (max(Data[[Score]], na.rm = T) > 250) {
-    Data[[Score]] <- lapply(Data[[Score]], function(x) {
-      if (is.na(x)) {return(NA)} else if (x == 0) {return(0)} else {log10(1/x)}
-    }) %>% unlist()
-    attr(Data, "Transformed") <- "Transformed"
-  }
-  
-  return(Data)
-}
-
-ScoreDataMAX <- lapply(unlist(ScoreMeta$Scores), function(x) {message(x); extractScoreMAX(x)})
-
-registerDoParallel(detectCores())
-foreach(n = 1:length(ScoreDataMAX)) %dopar% {
-  data <- ScoreDataMAX[[n]]
-  plot <- ggplot(data, aes(x = `Truth.Annotation`, y = data[[1]], fill = `Truth.Annotation`)) +
-    geom_boxplot() + theme_bw() + theme(legend.position = "none") + xlab("Truth Annotation") + 
-    ggtitle(attr(data, "Transformed")) + ylab(colnames(data)[1])
-  ggsave(paste0("~/Desktop/HoldPlots/Max/", colnames(data)[[1]], ".png"), plot)
-}
-
-fix3 <- ScoreDataMAX[[50]]
-fix3[fix3$`Symmetric Chi Squared Distance` > 50, "Symmetric Chi Squared Distance"] <- log10(1 / (fix3[fix3$`Symmetric Chi Squared Distance` > 50, "Symmetric Chi Squared Distance"] %>% unlist()))
-fix3 <- fix3[!is.infinite(fix3$`Symmetric Chi Squared Distance`),]
-
-plot <- ggplot(fix3, aes(x = `Truth.Annotation`, y = `Symmetric Chi Squared Distance`, fill = `Truth.Annotation`)) +
-  geom_boxplot() + theme_bw() + theme(legend.position = "none") + xlab("Truth Annotation") + 
-  ggtitle(attr(fix1, "Transformed")) + ylab(colnames(fix3)[1])
-ggsave(paste0("~/Desktop/HoldPlots/Max/", colnames(fix3)[1], ".png"), plot)
-
-
-# Remove plots that aren't supposed to be included with max 
-toRemove <- ScoreMeta[!ScoreMeta$IncludeMA, "Scores"] %>% unlist()
-toRemove <- toRemove[toRemove != "Squared-chord Distance"]
-lapply(toRemove, function(score) {
-  ggsave(paste0("~/Desktop/HoldPlots/Max/", score, ".png"), ggplot() + ggtitle("Score Removed") + theme_bw())
-})
-
-ScoreMeta %>%
-  unique() %>%
-  mutate(
-    panel = map_plot(Scores, function(x) {
-      ggdraw() + draw_image(paste0("~/Desktop/HoldPlots/Max/", x, ".png"))
-    })
-  ) %>%
-  trelliscope(name = "Max", path = "~/Downloads/SS_Scores/")
 
 
