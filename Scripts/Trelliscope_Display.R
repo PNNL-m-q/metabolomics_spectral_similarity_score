@@ -76,42 +76,39 @@ calc_overlap <- function(data) {
 # 7. Add overlap score to ScoreMetadata
 OS <- lapply(ScoreData_Sum, function(x) {calc_overlap(x)}) %>% unlist()
 ScoreMetadata$Overlap <- OS
+fwrite(ScoreMetadata, "~/Downloads/ScoreMetadata_Store.csv", row.names = F, quote = F)
 
-# 8. Make trelliscope display
-PreTrelli <- ScoreMetadata %>%
-  mutate(
-    Cluster = SumCluster,
-    TStatistic = TStatisticSum,
-    ScoreMin = Sum_ScoreMin,
-    ScoreMax = Sum_ScoreMax,
-    Overlap = OS
-  ) %>%
-  dplyr::select(Score, Family, Type, Cluster, TStatistic, Overlap, TheoreticalBounds) 
+# 8. Make and hold plots 
+lapply(1:length(ScoreData_Sum), function(n) {
+  message(ScoreMetadata$Score[n])
+  data <- ScoreData_Sum[[n]]
+  colnames(data) <- c("Score", "Truth Annotation")
+  plot <- ggplot(data, aes(x = `Truth Annotation`, fill = `Truth Annotation`, y = Score)) +
+    geom_boxplot() + 
+    theme_bw() + 
+    ylab(ifelse(attr(data, "Transformed") == "Transformed", "Transformed Score", "Score")) +
+    ggtitle(ScoreMetadata$Score[n])
+  ggsave(file.path("~/Downloads/HoldPlots/SUM", paste0(ScoreMetadata$Score[n], ".png")), plot = plot)
+})
 
-test <- PreTrelli %>%
-  group_by(Score) %>%
+# 9. Make trelliscope display      
+ScoreMetadata %>%      
   mutate(
     panel = map_plot(Score, function(x) {
-      data <- ScoreData_Sum[[Score]]
-      colnames(data) <- c("Score", "Truth Annotation")
-      ggplot(data, aes(x = `Truth Annotation`, fill = `Truth Annotation`, y = Score)) +
-        geom_boxplot() + 
-        theme_bw() + 
-        ylab(ifelse(attr(data, "Transformed") == "Transformed", "Transformed Score", "Score")) + 
-        ggtitle(Score)
+      ggdraw() + draw_image(paste0("~/Downloads/HoldPlots/SUM/", x, ".png"))
     }),
     cogs = map_cog(Score, function(x) {
       tibble(
-        Family = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Family) %>% unlist(), desc = "Family"),
-        Type = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Type) %>% unlist(), desc = "Type"),
-        `Theoretical Bounds` = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(TheoreticalBounds) %>% unlist(), desc = "Theoretical Bounds"),
-        Cluster = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Cluster) %>% unlist() %>% as.factor(), desc = "Cluster"),
-        TStatistic = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(TStatistic) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic"),
-        Overlap = cog(PreTrelli %>% filter(Score == x) %>% dplyr::select(Overlap) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap")
+        Family = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Family) %>% unlist(), desc = "Family"),
+        Type = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Type) %>% unlist(), desc = "Type"),
+        `Theoretical Bounds` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TheoreticalBounds) %>% unlist(), desc = "Theoretical Bounds"),
+        Cluster = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(SumCluster) %>% unlist() %>% as.factor(), desc = "Cluster"),
+        TStatistic = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticSum) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic"),
+        Overlap = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap")
       )})
-    ) #%>%
-  #dplyr::select(Score, panel, cogs) %>%
-  #trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
+    ) %>%
+  dplyr::select(Score, panel, cogs) %>%
+  trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
   
 
 
