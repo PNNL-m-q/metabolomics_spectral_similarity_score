@@ -1,3 +1,15 @@
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(pheatmap)
+library(ggplot2)
+library(patchwork)
+library(DT)
+library(rsample)
+library(randomForest)
+library(recipes)
+library(ranger)
+
 set.seed(5373)
 
 #' @returns A list of the following objects:
@@ -112,7 +124,7 @@ ScoreMetadata <- fread("~/Git_Repos/metabolomics_spectral_similarity_score/Metad
 
 # Extract only Sum Relevant Metadata
 SumMetadata <- ScoreMetadata %>% 
-  dplyr::select(SumCluster, Family, Type, TheoreticalBounds, Sum_ScoreMin, Sum_ScoreMedian, Sum_ScoreMax, TStatisticSum) %>%
+  dplyr::select(SumCluster, Family, Type, TheoreticalBounds, Sum_ScoreMin, Sum_ScoreMedian, Sum_ScoreMax, TStatisticSum, Overlap_Sum) %>%
   dplyr::mutate(
     SumCluster = factor(SumCluster, levels = 1:4),
     Family = as.factor(Family),
@@ -126,7 +138,7 @@ saveRDS(Sum_RF_Results, "~/Git_Repos/metabolomics_spectral_similarity_score/Data
 
 # Extract only Max Relevant Metadata
 MaxMetadata <- ScoreMetadata %>% 
-  dplyr::select(MaxCluster, Family, Type, TheoreticalBounds, Max_ScoreMin, Max_ScoreMedian, Max_ScoreMax, TStatisticMax) %>%
+  dplyr::select(MaxCluster, Family, Type, TheoreticalBounds, Max_ScoreMin, Max_ScoreMedian, Max_ScoreMax, TStatisticMax, Overlap_Max) %>%
   dplyr::mutate(
     MaxCluster = factor(MaxCluster, levels = 1:4),
     Family = as.factor(Family),

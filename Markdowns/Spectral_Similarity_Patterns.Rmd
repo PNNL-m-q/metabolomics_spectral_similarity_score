@@ -67,6 +67,10 @@ library(recipes)
 #fwrite(SumData, "~/Downloads/SumData.tsv", quote = F, row.names = F, sep = "\t")
 ```
 
+Here is a trelliscope display of the results: 
+
+<iframe src="./Trelliscopes/SS_Scores/index.html" width=1000px height=600px data-external="1"> </iframe>>
+
 ## Correlation Score
 
 #### Pearson Correlation: Max Score
@@ -80,6 +84,8 @@ HMA <- pheatmap(MP_Mat, main = "Max: Pearson Correlation")
 HMA
 ```
 
+There are 4 distinct clusters of scores using the max scaled data and a Pearson correlation. 
+
 #### Pearson Correlation: Sum Score
 
 ```{r, SumPearson, fig.height = 12, fig.width = 12}
@@ -90,6 +96,9 @@ colnames(SP_Mat) <- row.names(SP_Mat) <- MaxPearson$Score1 %>% unique()
 HMB <- pheatmap(SP_Mat, main = "Sum: Pearson Correlation")
 HMB
 ```
+
+There are 4 distinct clusters of scores using the sum scaled data and a Pearson correlation. 
+These are the same clusters as in the max scaled data.0
 
 ## Add T Statistic & Distributional Properties
 
@@ -175,6 +184,12 @@ is inclusive and a parentheses is not inclusive.
 
 **MaxCluster:** The cluster number the score falls into for the max data 
 
+**TStatisticSum:** The t-statistic between the true positives and true negatives
+for a score in the sum data 
+
+**TStatisticMax:** The t-statistic between the true positives and true negatives 
+for a score in the max data 
+
 **Sum_ScoreMin:** The score's minimum value in the sum dataset
 
 **Sum_ScoreMedian:** The score's median value in the sum dataset
@@ -187,11 +202,11 @@ is inclusive and a parentheses is not inclusive.
 
 **Max_ScoreMax:** The score's maximum value in the max dataset 
 
-**TStatisticSum:** The t-statistic between the true positives and true negatives
-for a score in the sum data 
+**Overlap_Sum:** The overlap score (which is the propotion of true positives that 
+overlap with the true negative/unknown distributions) for the sum dataset
 
-**TStatisticMax:** The t-statistic between the true positives and true negatives 
-for a score in the max data 
+**Overlap_Max:** The overlap score (which is the proportion of true positives that
+overlap with the true negative/unknown distributions) for the max dataset
 
 ## Random Forest 
 
@@ -254,6 +269,117 @@ Description:
 MaxModel[[4]]
 ```
 
-## Cluster Description
+## Comparison
+
+Given the high performance of both models, the most important variables for defining
+clusters are: 
+
+```{r}
+merge(
+  SumModel[[4]] %>% 
+    mutate(Variable = gsub("Sum|_Sum", "", Variable)),
+  MaxModel[[4]] %>% 
+    dplyr::mutate(Variable = ifelse(Variable == "Max", "High", Variable),
+                  Variable = gsub("Max|_Max", "", Variable),
+                  Variable = ifelse(Variable == "High", "Max", Variable)),
+  by = "Variable"
+) %>% 
+  rename(`Sum Importance` = Importance.x, `Max Importance` = Importance.y) %>%
+  dplyr::arrange(-`Sum Importance`)
+```
+
+# Cluster Descriptions
+
+**Sum Data:**
+
+```{r}
+ScoreMetadata %>%
+  dplyr::group_by(SumCluster) %>%
+  dplyr::rename(Cluster = SumCluster) %>%
+  summarise(
+    MeanTStat = mean(TStatisticSum),
+    MeanOverlap = mean(Overlap_Sum),
+    MeanMedian = mean(Sum_ScoreMedian),
+    MeanMin = mean(Sum_ScoreMin),
+    MeanMax = mean(Sum_ScoreMax),
+    TheoreticalBounds_Left = sum(TheoreticalBounds == "Left"),
+    TheoreticalBounds_Right = sum(TheoreticalBounds == "Right"),
+    TheoreticalBounds_Both = sum(TheoreticalBounds == "Both"),
+    TheoreticalBounds_None = sum(TheoreticalBounds == "Not"),
+    Type_Distance = sum(Type == "Distance"),
+    Type_Similarity = sum(Type == "Similarity"),
+    `Chi Squared` = sum(Family == "Chi Squared"),
+    Combination  = sum(Family == "Combination"),
+    `Combined RI`  = sum(Family == "Combined RI"),
+    Correlative  = sum(Family == "Correlative"),
+    Fidelity  = sum(Family == "Fidelity"),
+    `Inner Product`  = sum(Family == "Inner Product"),
+    Intersection  = sum(Family == "Intersection"),
+    `L1 Distance`  = sum(Family == "L1 Distance"),
+    `L1 Metric`  = sum(Family == "L1 Metric"),
+    `LP Distance`  = sum(Family == "LP Distance"),
+    `Shannon Entropy`  = sum(Family == "Shannon's Entropy"),
+    `Vicis Wave Hedges`  = sum(Family == "Vicis Wave Hedges")
+  ) %>% DT::datatable(options = list(scrollX = T))
+```
+
+The "best" clusters are 1 and 2, just where Cluster 1 has higher scores for 
+True Positives than True Negatives/Unknowns, and Cluster 2 has lower scores 
+for True Positives than True Negatives/Unknown.
+
+**Cluster 1 Diagnostics:** Highest T Stat, Lowest Overlap Score, majority of scores 
+are bound at both ends and similarity metrics, most scores are inner product,
+correlative, or intersection family
+
+**Cluster 2 Diagnostics:** Lowest T Stat, 2nd best Overlap Score, mostly
+bound to the left, primarily distance metrics. No obvious family patterns.
+
+**Cluster 3 Diagnostics:** 3rd best Overlap score. All left-bound distance metrics.
+Mostly the Chi Squared and Vicis Wave Hedges families. 
+
+**Cluster 4 Diagnostics:** Worst overlap score. 5 distance families. No obvious
+family patterns. 
+
+**Max Data:**
+
+```{r}
+ScoreMetadata %>%
+  dplyr::group_by(SumCluster) %>%
+  dplyr::rename(Cluster = SumCluster) %>%
+  summarise(
+    MeanTStat = mean(TStatisticMax),
+    MeanOverlap = mean(Overlap_Max),
+    MeanMedian = mean(Max_ScoreMedian),
+    MeanMin = mean(Max_ScoreMin),
+    MeanMax = mean(Max_ScoreMax),
+    TheoreticalBounds_Left = sum(TheoreticalBounds == "Left"),
+    TheoreticalBounds_Right = sum(TheoreticalBounds == "Right"),
+    TheoreticalBounds_Both = sum(TheoreticalBounds == "Both"),
+    TheoreticalBounds_None = sum(TheoreticalBounds == "Not"),
+    Type_Distance = sum(Type == "Distance"),
+    Type_Similarity = sum(Type == "Similarity"),
+    `Chi Squared` = sum(Family == "Chi Squared"),
+    Combination  = sum(Family == "Combination"),
+    `Combined RI`  = sum(Family == "Combined RI"),
+    Correlative  = sum(Family == "Correlative"),
+    Fidelity  = sum(Family == "Fidelity"),
+    `Inner Product`  = sum(Family == "Inner Product"),
+    Intersection  = sum(Family == "Intersection"),
+    `L1 Distance`  = sum(Family == "L1 Distance"),
+    `L1 Metric`  = sum(Family == "L1 Metric"),
+    `LP Distance`  = sum(Family == "LP Distance"),
+    `Shannon Entropy`  = sum(Family == "Shannon's Entropy"),
+    `Vicis Wave Hedges`  = sum(Family == "Vicis Wave Hedges")
+  ) %>% DT::datatable(options = list(scrollX = T))
+```
+
+Given the overlap score difference, we recommend using the sum method over the 
+max method. 
+
+Cluster patterns are the same as above.
+
+
+
+
 
 
