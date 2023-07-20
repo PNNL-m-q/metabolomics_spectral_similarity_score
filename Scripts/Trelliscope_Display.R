@@ -105,15 +105,52 @@ ScoreMetadata %>%
         Type = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Type) %>% unlist(), desc = "Type"),
         `Theoretical Bounds` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TheoreticalBounds) %>% unlist(), desc = "Theoretical Bounds"),
         Cluster = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(SumCluster) %>% unlist() %>% as.factor(), desc = "Cluster"),
-        `Sum TStatistic` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticSum) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic"),
-        `Sum Overlap` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap_Sum) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap_Sum")
+        `Sum TStatistic` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticSum) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic_Sum"),
+        `Sum Overlap` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap_Sum) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap_Sum"),
+        `Max TStatistic` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticMax) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic_Max"),
+        `Max Overlap` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap_Max) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap_Max")
       )})
     ) %>%
   dplyr::select(Score, panel, cogs) %>%
   trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
 
 # 10. MAX: Make and hold plots 
-  
+lapply(1:length(ScoreData_Max), function(n) {
+  message(ScoreMetadata$Score[n])
+  data <- ScoreData_Max[[n]]
+  colnames(data) <- c("Score", "Truth Annotation")
+  plot <- ggplot(data, aes(x = `Truth Annotation`, fill = `Truth Annotation`, y = Score)) +
+    geom_boxplot() + 
+    theme_bw() + 
+    ylab(ifelse(attr(data, "Transformed") == "Transformed", "Transformed Score", "Score")) +
+    ggtitle(ScoreMetadata$Score[n])
+  ggsave(file.path("~/Downloads/HoldPlots/MAX", paste0(ScoreMetadata$Score[n], ".png")), plot = plot)
+})
+
+# 11. SUM: Make trelliscope display      
+ScoreMetadata %>%      
+  mutate(
+    panel = map_plot(Score, function(x) {
+      ggdraw() + draw_image(paste0("~/Downloads/HoldPlots/MAX/", x, ".png"))
+    }),
+    cogs = map_cog(Score, function(x) {
+      tibble(
+        Family = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Family) %>% unlist(), desc = "Family"),
+        Type = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Type) %>% unlist(), desc = "Type"),
+        `Theoretical Bounds` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TheoreticalBounds) %>% unlist(), desc = "Theoretical Bounds"),
+        Cluster = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(SumCluster) %>% unlist() %>% as.factor(), desc = "Cluster"),
+        `Sum TStatistic` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticSum) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic_Sum"),
+        `Sum Overlap` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap_Sum) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap_Sum"),
+        `Max TStatistic` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(TStatisticMax) %>% unlist() %>% as.numeric() %>% round(8), desc = "TStatistic_Max"),
+        `Max Overlap` = cog(ScoreMetadata %>% filter(Score == x) %>% dplyr::select(Overlap_Max) %>% unlist() %>% as.numeric() %>% round(8), desc = "Overlap_Max")
+      )})
+  ) %>%
+  dplyr::select(Score, panel, cogs) %>%
+  trelliscope(name = "Max", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
+
+
+
+
 
 
 
