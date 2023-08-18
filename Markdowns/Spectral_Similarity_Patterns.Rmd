@@ -428,17 +428,80 @@ Fig1
 ## Figure 2
 
 ```{r}
+ScoreMetadata <- fread("../Metadata/Score_Metadata.txt")
+Sum <- fread("~/Downloads/SumData.tsv")
+Sum$`Kumar Johnson Distance` <- as.numeric(Sum$`Kumar Johnson Distance`)
+Sum$`Kumar Johnson Divergence` <- as.numeric(Sum$`Kumar Johnson Divergence`)
+
 SubFams <- ScoreMetadata %>%
   mutate(Family = ifelse(Family == "Combined RI", "Combination", Family),
          Family = ifelse(Family == "L1 Metric", "L1 Distance", Family)) %>%
   group_by(Family) %>%
-  slice_max(order_by = Overlap_Sum, n = 1, with_ties = F) %>%
-  dplyr::select(Score, Family) 
+  slice_min(order_by = Overlap_Sum, n = 1, with_ties = F) %>%
+  dplyr::select(Score, Family) %>%
+  dplyr::rename(Metric = Score)
+
+Fig2ToPlot <- Sum %>%
+  dplyr::select(c(all_of(SubFams$Metric), Truth.Annotation)) %>%
+  pivot_longer(all_of(SubFams$Metric)) %>%
+  rename(Metric = name) %>%
+  group_by(Metric) %>%
+  rename(Value = value) %>%
+  mutate(Truth = factor(ifelse(Truth.Annotation == "True.Positive", "True Positive", 
+         ifelse(Truth.Annotation == "True.Negative", "True Negative", "Unknown")),
+         levels = c("True Positive", "True Negative", "Unknown"))) %>%
+  left_join(SubFams, by = "Metric") #%>%
+  #mutate(Family = paste0(Family, "\n", Metric))
+
+# Fix L1 Distance
+Fig2ToPlot <- Fig2ToPlot %>%
+  mutate(Value = ifelse(Family == "L1 Distance", log(Value + 1e-9), Value),
+         Family = ifelse(Family == "L1 Distance", "Log(L1 Distance)", Family)) 
+  
+Fig2 <- ggplot(Fig2ToPlot, aes(x = Truth, y = Value)) +
+  geom_boxplot() + theme_bw() + facet_wrap(.~Family, scales = "free")
+
+Fig2
+```
+
+## Figure 4
+
+I have another figure request: could you generate this kind of figure (https://cran.r-project.org/web/packages/ggalluvial/vignettes/ggalluvial.html) that will show how each of the sum clusters partition into the ten metric families?
+
+```{r}
+library(ggalluvial)
+
+ScoreMetadata %>%
+  mutate(Family = ifelse(Family == "Combined RI", "Combination", Family),
+         Family = ifelse(Family == "L1 Metric", "L1 Distance", Family),
+         SumCluster = as.factor(SumCluster),
+         Family = as.factor(Family)) %>%
+  rename(`Cluster Number` = SumCluster) %>%
+  ggplot(aes(axis1 = Family, axis2 = `Cluster Number`)) + 
+    geom_alluvium(aes(fill = Family), width = 1/12) +
+    geom_stratum(width = 1/12, fill = "black", color = "grey") +
+    geom_label(stat = "stratum", aes(label = after_stat(stratum))) +
+    scale_fill_brewer(type = "qual", palette = "Paired") + 
+    theme_minimal() + 
+    scale_x_discrete(limits = c("Family", "Cluster"), expand = c(.05, .05)) +
+    theme(legend.position = "none", axis.text.y = element_blank(), 
+          axis.text.x = element_text(size = 16), panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(), panel.background = element_blank())
+```
+
+
+## Figure 5
+
+Also, last figure request: Can you make a variable importance plot (like the one at the bottom of this page https://www.tidymodels.org/start/case-study/) for the random forest model that you fit to predict cluster groups? I just feel we need a visual for that part of the analysis, and this is the only thing that made some sense to me. If you have other ideas though, please share!
+
+
+```{r}
 
 
 
 
 ```
+
 
 
 
