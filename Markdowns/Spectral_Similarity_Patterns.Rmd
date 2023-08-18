@@ -381,43 +381,64 @@ Cluster patterns are the same as above.
 ## Figure 1
 
 ```{r}
-MS <- fread("../Data/MS_Example/Query.txt")
-MS1 <- fread("../Data/MS_Example/6-Phospho-D-gluconic acid.txt")
-MS2 <- fread("../Data/MS_Example/beta-D-Fructose 6-phosphate.txt")
-MS3 <- fread("../Data/MS_Example/D-Glucose 1-phosphate.txt")
+# Select an example
+#Sum[Sum$`Sample name` == "UDN_BG_A_C_Biorec291064_M_012" & Sum$`Peak Index` == 13,] %>% 
+#  arrange(-`Spectral Similarity Score`) %>% 
+#  dplyr::select(`Compound Name`, `Spectral Similarity Score`, Truth.Annotation)
 
-make_ms_plot <- function(ms, compound) {
+library(rhdf5)
+
+#datasets <- h5ls("../Data/MS_Example/UDN_BG_A_C_Biorec291064_M_012.hdf5")
+#datasets %>% filter(group == "/") %>% head(141) %>% dplyr::select(name) %>% unlist() %>% as.numeric() %>% sort() %>% .[13]
+# RI is 7.675567
+
+Query <- h5read("../Data/MS_Example/UDN_BG_A_C_Biorec291064_M_012.hdf5", "/7.675566666666667")
+Alanine <- h5read("../Data/MS_Example/UDN_BG_A_C_Biorec291064_M_012.hdf5", "/7.675566666666667/L-alanine [major]")
+Glycolic <- h5read("../Data/MS_Example/UDN_BG_A_C_Biorec291064_M_012.hdf5", "/7.675566666666667/glycolic acid")
+Lactic <- h5read("../Data/MS_Example/UDN_BG_A_C_Biorec291064_M_012.hdf5", "/7.675566666666667/lactic acid")
+
+make_ms_plot <- function(ms, compound, scale = FALSE) {
   
-  data.frame(
-    MZ = c(ms$MZ - 1e-9, ms$MZ, ms$MZ + 1e-9),
-    Intensity = c(rep(0, nrow(ms)), ms$Intensity, rep(0, nrow(ms))),
-    Abundance = c(rep(0, nrow(ms)), ms$Abundance, rep(0, nrow(ms)))
+  res <- data.frame(
+    MZ = c(ms$mz - 1e-9, ms$mz, ms$mz + 1e-9),
+    Abundance = c(rep(0, length(ms$mz)), ms$abundance, rep(0, length(ms$mz)))
    ) %>%
-    arrange(MZ) %>%
-    ggplot(aes(x = MZ, y = Abundance)) + 
+    arrange(MZ) 
+  
+  if (scale) {res$Abundance <- (res$Abundance / max(res$Abundance) * 1000)}
+  
+  ggplot(res, aes(x = MZ, y = Abundance)) + 
       geom_line() + 
       theme_bw() + 
       xlab(expression(italic("M/Z"))) +
-      ggtitle(compound) + xlim(c(100, 550))
+      ggtitle(compound) + xlim(c(100, 225))
   
 }
 
 
-cosine_cor <- function(Ref, Query) {
-  data <- merge(Ref, Query, by = "MZ", all = T) %>% 
-    filter(!is.na(Abundance.x)) %>% 
-    mutate(Intensity.y = ifelse(is.na(Intensity.y), 0, Intensity.y))
-  lsa::cosine(data$Intensity.x, data$Intensity.y) %>%
-  round(4)
-}
-
-make_ms_plot(MS, "Query Spectra is D-Glucose 1-phosphate") +
-  make_ms_plot(MS1, paste("beta-D-Fructose 6-Phosphate, Cosine Correlation:", cosine_cor(MS1, MS))) +
-  make_ms_plot(MS2, paste("6-phospho-D-gluconic Acid, Cosine Correlation:", cosine_cor(MS2, MS))) +
-  make_ms_plot(MS3, paste("D-Glucose 1-phosphate, Cosine Correlation:", cosine_cor(MS3, MS))) +
+Fig1 <- make_ms_plot(Query, "Query Spectra is L-Alanine", scale = T) +
+  make_ms_plot(Glycolic, "Glycolic Acid, Spectral Similarity = 0.761") +
+  make_ms_plot(Lactic, "Lactic Acid, Spectral Similarty = 0.588") +
+  make_ms_plot(Alanine, "L-Alanine, Spectral Similarty = 0.165") +
   plot_annotation(tag_levels = "a")
+
+Fig1
 ```
 
+## Figure 2
+
+```{r}
+SubFams <- ScoreMetadata %>%
+  mutate(Family = ifelse(Family == "Combined RI", "Combination", Family),
+         Family = ifelse(Family == "L1 Metric", "L1 Distance", Family)) %>%
+  group_by(Family) %>%
+  slice_max(order_by = Overlap_Sum, n = 1, with_ties = F) %>%
+  dplyr::select(Score, Family) 
+
+
+
+
+```
 
 
 
