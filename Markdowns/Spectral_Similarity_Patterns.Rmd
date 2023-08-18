@@ -466,8 +466,6 @@ Fig2
 
 ## Figure 4
 
-I have another figure request: could you generate this kind of figure (https://cran.r-project.org/web/packages/ggalluvial/vignettes/ggalluvial.html) that will show how each of the sum clusters partition into the ten metric families?
-
 ```{r}
 library(ggalluvial)
 
@@ -496,10 +494,19 @@ Also, last figure request: Can you make a variable importance plot (like the one
 
 
 ```{r}
+SumModel[[4]]$Variable <- c("T Statistic", "Overlap", "Median Value", "Min Value", 
+                       "Theoretical Bounds", "Score Type", "Family", "Max Value")
+SumModel[[4]]$Variable <- factor(SumModel[[4]]$Variable, levels = rev(SumModel[[4]]$Variable))
+MaxModel[[4]]$Variable <- c("T Statistic", "Overlap", "Median Value", "Max Value", 
+                       "Theoretical Bounds", "Min Value", "Family", "Score Type")
+MaxModel[[4]]$Variable <- factor(MaxModel[[4]]$Variable, levels = rev(MaxModel[[4]]$Variable))
 
-
-
-
+(ggplot(SumModel[[4]], aes(x = Importance, y = Variable)) + 
+    geom_bar(stat = "identity") + theme(legend.position = "none") +
+    theme_bw() + ggtitle("Sum")) + 
+(ggplot(MaxModel[[4]], aes(x = Importance, y = Variable)) + 
+    geom_bar(stat = "identity") + theme(legend.position = "none") +
+    theme_bw() + ggtitle("Max")) 
 ```
 
 
