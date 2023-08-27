@@ -506,10 +506,7 @@ MaxModel[[4]]$Variable <- factor(MaxModel[[4]]$Variable, levels = rev(MaxModel[[
 
 (ggplot(SumModel[[4]], aes(x = Importance, y = Variable)) + 
     geom_bar(stat = "identity") + theme(legend.position = "none") +
-    theme_bw() + ggtitle("Sum")) + 
-(ggplot(MaxModel[[4]], aes(x = Importance, y = Variable)) + 
-    geom_bar(stat = "identity") + theme(legend.position = "none") +
-    theme_bw() + ggtitle("Max")) 
+    theme_bw() + ggtitle("Sum")) 
 ```
 
 
