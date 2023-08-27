@@ -77,7 +77,7 @@ Here is a trelliscope display of the results:
 
 ```{r, MaxPearson, fig.height = 12, fig.width = 12}
 MaxPearson <- fread("../Data/Max_Pearson.txt")
-MP_Mat <- matrix(MaxPearson$Pearson, nrow = 74, ncol = 74)
+MP_Mat <- matrix(MaxPearson$Pearson, nrow = 66, ncol = 66)
 colnames(MP_Mat) <- row.names(MP_Mat) <- MaxPearson$Score1 %>% unique()
 
 HMA <- pheatmap(MP_Mat, main = "Max: Pearson Correlation")
@@ -90,7 +90,7 @@ There are 4 distinct clusters of scores using the max scaled data and a Pearson 
 
 ```{r, SumPearson, fig.height = 12, fig.width = 12}
 SumPearson <- fread("../Data/Sum_Pearson.txt")
-SP_Mat <- matrix(SumPearson$Pearson, nrow = 74, ncol = 74)
+SP_Mat <- matrix(SumPearson$Pearson, nrow = 66, ncol = 66)
 colnames(SP_Mat) <- row.names(SP_Mat) <- MaxPearson$Score1 %>% unique()
 
 HMB <- pheatmap(SP_Mat, main = "Sum: Pearson Correlation")
@@ -490,6 +490,30 @@ ScoreMetadata %>%
           panel.grid.minor = element_blank(), panel.background = element_blank())
 ```
 
+## Table 1
+
+```{r}
+ScoreMetadata %>%
+  group_by(SumCluster) %>%
+  summarise(
+    TStat = mean(TStatisticSum),
+    Overlap = mean(Overlap_Sum),
+    ScoreMedian = mean(Sum_ScoreMedian)
+  )
+
+```
+
+## Supplemental Table 1
+
+```{r}
+ScoreMetadata %>%
+  group_by(SumCluster) %>%
+  summarise(
+    TStat = mean(TStatisticMax),
+    Overlap = mean(Overlap_Max),
+    ScoreMedian = mean(Max_ScoreMedian)
+  )
+```
 
 ## Figure 5
 
@@ -497,16 +521,14 @@ Also, last figure request: Can you make a variable importance plot (like the one
 
 
 ```{r}
-SumModel[[4]]$Variable <- c("T Statistic", "Overlap", "Median Value", "Min Value", 
-                       "Theoretical Bounds", "Score Type", "Family", "Max Value")
+SumModel <- readRDS("../Data/Sum_RF_Results.RDS")
+SumModel[[4]]$Variable <- c("T Statistic", "Overlap", "Median Value", "Family", 
+                       "Min Value", "Theoretical Bounds", "Type", "Max Value")
 SumModel[[4]]$Variable <- factor(SumModel[[4]]$Variable, levels = rev(SumModel[[4]]$Variable))
-MaxModel[[4]]$Variable <- c("T Statistic", "Overlap", "Median Value", "Max Value", 
-                       "Theoretical Bounds", "Min Value", "Family", "Score Type")
-MaxModel[[4]]$Variable <- factor(MaxModel[[4]]$Variable, levels = rev(MaxModel[[4]]$Variable))
 
 (ggplot(SumModel[[4]], aes(x = Importance, y = Variable)) + 
     geom_bar(stat = "identity") + theme(legend.position = "none") +
-    theme_bw() + ggtitle("Sum")) 
+    theme_bw()) 
 ```
 
 
