@@ -112,7 +112,7 @@ ScoreMetadata %>%
       )})
     ) %>%
   dplyr::select(Score, panel, cogs) %>%
-  trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
+  trelliscope(name = "Sum", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/", thumb = T)
 
 # 10. MAX: Make and hold plots 
 lapply(1:length(ScoreData_Max), function(n) {
@@ -146,7 +146,7 @@ ScoreMetadata %>%
       )})
   ) %>%
   dplyr::select(Score, panel, cogs) %>%
-  trelliscope(name = "Max", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/")
+  trelliscope(name = "Max", path = "~/Git_Repos/metabolomics_spectral_similarity_score/Trelliscopes/SS_Scores/", thumb = T)
 
 
 
