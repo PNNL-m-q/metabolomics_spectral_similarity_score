@@ -383,7 +383,7 @@ Cluster patterns are the same as above.
 
 ## Figure 1
 
-```{r}
+```{r, fig.height = 4, fig.width = 10}
 # Select an example
 #Sum[Sum$`Sample name` == "UDN_BG_A_C_Biorec291064_M_012" & Sum$`Peak Index` == 13,] %>% 
 #  arrange(-`Spectral Similarity Score`) %>% 
@@ -420,13 +420,75 @@ make_ms_plot <- function(ms, compound, scale = FALSE) {
 
 
 Fig1 <- make_ms_plot(Query, "Query Spectra is L-Alanine", scale = T) +
-  make_ms_plot(Glycolic, "Glycolic Acid, Spectral Similarity = 0.761") +
-  make_ms_plot(Lactic, "Lactic Acid, Spectral Similarty = 0.588") +
-  make_ms_plot(Alanine, "L-Alanine, Spectral Similarty = 0.165") +
+  make_ms_plot(Glycolic, "Glycolic Acid, Cosine Correlation = 0.761") +
+  make_ms_plot(Lactic, "Lactic Acid, Cosine Correlation = 0.588") +
+  make_ms_plot(Alanine, "L-Alanine, Cosine Correlation = 0.165") +
   plot_annotation(tag_levels = "a")
 
 Fig1
 ```
+
+
+```{r}
+Sum <- fread("~/Downloads/SumData.tsv")
+
+# Sub down to peak index
+Sub <- Sum[Sum$`Sample name` == "UDN_BG_A_C_Biorec291064_M_012" & Sum$`Peak Index` == 13,] %>%
+  mutate(
+    Truth.Annotation = ifelse(Truth.Annotation == "True.Positive", "True Positive", Truth.Annotation),
+    Truth.Annotation = ifelse(Truth.Annotation == "True.Negative", "True Negative", Truth.Annotation)
+  )
+
+Sub %>%
+  dplyr::select(`Stein Scott Similarity`, `DFT Correlation`, `DWT Correlation`, `Cosine Correlation`, Truth.Annotation) %>%
+  tidyr::pivot_longer(1:4) %>%
+  dplyr::rename(`Score Name` = name, `Score Value` = value, `Truth Annotation` = Truth.Annotation) %>%
+  ggplot(aes(x = `Score Name`, y = `Score Value`)) +
+   geom_boxplot(outlier.shape = NA) +
+   geom_jitter(height = 0, width = 0.1, aes(color = `Truth Annotation`), size = 2) +
+   theme_bw() +
+   ylim(c(0, 1)) +
+   scale_color_manual(values = c("black", "red"))
+```
+```{r}
+TP_Rankings <- Sum %>%
+  group_by(`Sample name`, `Peak Index`) %>%
+  filter("True.Positive" %in% Truth.Annotation) %>%
+  select(all_of(c(ScoreMetadata$Score, "Truth.Annotation"))) %>%
+  mutate(
+    `Kumar Johnson Divergence` = as.numeric(`Kumar Johnson Divergence`)
+  ) %>%
+  pivot_longer(3:68) %>%
+  ungroup() %>%
+  group_by(`Sample name`, `Peak Index`, name) %>%
+  mutate(
+    Rank = rank(value)
+  ) %>%
+  ungroup() %>%
+  dplyr::filter(Truth.Annotation == "True.Positive") 
+```
+
+```{r}
+TP_Rankings %>%
+  rename(Score = name) %>%
+  merge(ScoreMetadata %>% select(Score, SumCluster)) %>%
+  mutate(`Cluster Number` = as.factor(SumCluster)) %>%
+  arrange(`Cluster Number`) %>%
+  mutate(Score = factor(Score, levels = unique(Score))) %>%
+  ggplot(aes(x = Score, y = Rank, fill = `Cluster Number`)) +
+    geom_boxplot() +
+    theme_bw() +
+    ylab("True Positive Rank") +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+```
+
+```{r}
+
+
+
+
+```
+
 
 ## Figure 2
 
