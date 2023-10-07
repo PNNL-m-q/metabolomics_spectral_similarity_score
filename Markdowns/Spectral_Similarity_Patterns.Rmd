@@ -432,62 +432,71 @@ Fig1
 ```{r}
 Sum <- fread("~/Downloads/SumData.tsv")
 
-# Sub down to peak index
-Sub <- Sum[Sum$`Sample name` == "UDN_BG_A_C_Biorec291064_M_012" & Sum$`Peak Index` == 13,] %>%
-  mutate(
-    Truth.Annotation = ifelse(Truth.Annotation == "True.Positive", "True Positive", Truth.Annotation),
-    Truth.Annotation = ifelse(Truth.Annotation == "True.Negative", "True Negative", Truth.Annotation)
-  )
+Sub <- Sum %>%
+  filter(Truth.Annotation %in% c("True.Positive", "True.Negative")) %>%
+  select(Truth.Annotation, `Stein Scott Similarity Nist`, 
+         `Weighted Cosine Correlation`, `Cosine Correlation`, `DWT Correlation`,
+         `DFT Correlation`, `Canberra Metric`) %>%
+  mutate(`DWT Correlation` = abs(`DWT Correlation`))
 
 Sub %>%
-  dplyr::select(`Stein Scott Similarity`, `DFT Correlation`, `DWT Correlation`, `Cosine Correlation`, Truth.Annotation) %>%
-  tidyr::pivot_longer(1:4) %>%
-  dplyr::rename(`Score Name` = name, `Score Value` = value, `Truth Annotation` = Truth.Annotation) %>%
-  ggplot(aes(x = `Score Name`, y = `Score Value`)) +
-   geom_boxplot(outlier.shape = NA) +
-   geom_jitter(height = 0, width = 0.1, aes(color = `Truth Annotation`), size = 2) +
-   theme_bw() +
-   ylim(c(0, 1)) +
-   scale_color_manual(values = c("black", "red"))
-```
-```{r}
-TP_Rankings <- Sum %>%
-  group_by(`Sample name`, `Peak Index`) %>%
-  filter("True.Positive" %in% Truth.Annotation) %>%
-  select(all_of(c(ScoreMetadata$Score, "Truth.Annotation"))) %>%
+  pivot_longer(2:7) %>%
+  rename(Score = name, `Score Value` = value, Truth = Truth.Annotation) %>%
   mutate(
-    `Kumar Johnson Divergence` = as.numeric(`Kumar Johnson Divergence`)
+    Truth = ifelse(Truth == "True.Positive", "True Positive", "True Negative"),
+    Truth = factor(Truth, levels = c("True Positive", "True Negative"))
   ) %>%
-  pivot_longer(3:68) %>%
-  ungroup() %>%
-  group_by(`Sample name`, `Peak Index`, name) %>%
-  mutate(
-    Rank = rank(value)
-  ) %>%
-  ungroup() %>%
-  dplyr::filter(Truth.Annotation == "True.Positive") 
-```
-
-```{r}
-TP_Rankings %>%
-  rename(Score = name) %>%
-  merge(ScoreMetadata %>% select(Score, SumCluster)) %>%
-  mutate(`Cluster Number` = as.factor(SumCluster)) %>%
-  arrange(`Cluster Number`) %>%
-  mutate(Score = factor(Score, levels = unique(Score))) %>%
-  ggplot(aes(x = Score, y = Rank, fill = `Cluster Number`)) +
-    geom_boxplot() +
+  ggplot(aes(x = Score, y = `Score Value`, fill = Truth)) +
+    geom_boxplot() + 
     theme_bw() +
-    ylab("True Positive Rank") +
-    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) +
+    scale_fill_manual(values = c("steelblue", "firebrick"))
 ```
 
 ```{r}
+prop_thresh <- function(thresh) {
+  Sub %>%
+    pivot_longer(2:7) %>%
+    filter(value >= thresh) %>%
+    group_by(name) %>%
+    summarize(
+      TP.Proportion = sum(Truth.Annotation == "True.Positive") / 13486,
+      TN.Proportion = sum(Truth.Annotation == "True.Negative") / 2575420
+    ) %>%
+    mutate(Threshold = thresh)
+}
 
-
-
-
+AllThresholds <- do.call(rbind, lapply((0:100)/100, prop_thresh))
 ```
+
+```{r}
+AllThresholds %>%
+  rename(Score = name, `True Positive` = TP.Proportion, `True Negative` = TN.Proportion) %>%
+  pivot_longer(2:3) %>%
+  rename(Truth = name, Proportion = value, `Score Threshold` = Threshold) %>%
+  mutate(Truth = factor(Truth, levels = c("True Positive", "True Negative"))) %>%
+  filter(Score %in% c("Cosine Correlation", "Stein Scott Similarity Nist", "Canberra Metric")) %>%
+  ggplot(aes(x = `Score Threshold`, y = Proportion, color = Score)) +
+    geom_line() +
+    theme_bw() +
+    facet_wrap(.~Truth, scales = "free")
+```
+
+```{r}
+SampleMetadata <- fread("../Metadata/Sample_Metadata.csv")
+
+Sum %>%
+  filter(Truth.Annotation == "True.Positive") %>%
+  select(`Sample name`, `Stein Scott Similarity Nist`, `DFT Correlation`) %>%
+  rename(`Sample Name` = `Sample name`) %>%
+  merge(SampleMetadata, by = "Sample Name") %>%
+  pivot_longer(2:3) %>%
+  rename(Score = name, `Score Value` = value) %>%
+  ggplot(aes(x = Score, y = `Score Value`, fill = `Sample Type`)) +
+    geom_boxplot() +
+    theme_bw()
+```
+
 
 
 ## Figure 2
