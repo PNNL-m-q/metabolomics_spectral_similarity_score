@@ -460,8 +460,8 @@ prop_thresh <- function(thresh) {
     filter(value >= thresh) %>%
     group_by(name) %>%
     summarize(
-      TP.Proportion = sum(Truth.Annotation == "True.Positive") / 13486,
-      TN.Proportion = sum(Truth.Annotation == "True.Negative") / 2575420
+      TP.Proportion = sum(Truth.Annotation == "True.Positive") / (13486 + 2575420),
+      TN.Proportion = sum(Truth.Annotation == "True.Negative") / (2575420 + 13486)
     ) %>%
     mutate(Threshold = thresh)
 }
